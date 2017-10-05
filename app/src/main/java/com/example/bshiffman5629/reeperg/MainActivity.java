@@ -15,13 +15,11 @@ public class MainActivity extends Activity {
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity.
-        /*
         mGLView = new MyGLSurfaceView(this);
-        mGLView.setEGLContextClientVersion(2);
-        mGLView.setRenderer(new MyGLRenderer());
-        */
+        //mGLView.setEGLContextClientVersion(2);
+        //mGLView.setRenderer(new MyGLRenderer());
 
         //setContentView(mGLView);
-        setContentView(R.layout.activity_main);
+        setContentView(mGLView);
     }
 }

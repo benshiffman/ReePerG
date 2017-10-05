@@ -15,27 +15,27 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Triangle mTriangle;
     private Square   mSquare;
 
-    @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         // Set the background frame color
-        GLES20.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-        //initialize a triangle
+        // initialize a triangle
         mTriangle = new Triangle();
         // initialize a square
-        //mSquare = new Square();
-    }
-
-    public void onSurfaceChanged(GL10 unused, int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
+        mSquare = new Square();
     }
 
     public void onDrawFrame(GL10 unused) {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        System.out.println("test");
+        //System.out.println("test");
         mTriangle.draw();
+        mSquare.draw();
+    }
+
+    public void onSurfaceChanged(GL10 unused, int width, int height) {
+        GLES20.glViewport(0, 0, width, height);
     }
 
     public static int loadShader(int type, String shaderCode){
