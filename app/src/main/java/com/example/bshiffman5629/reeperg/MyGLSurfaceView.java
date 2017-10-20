@@ -2,6 +2,7 @@ package com.example.bshiffman5629.reeperg;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
 
 /**
  * Created by bshiffman5629 on 9/27/2017.
@@ -11,8 +12,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyGLRenderer mRenderer;
 
-    public MyGLSurfaceView(Context context){
-        super(context);
+    public MyGLSurfaceView(Context context, AttributeSet attrs){
+        super(context, attrs);
 
         // Create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);

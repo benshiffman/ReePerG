@@ -14,6 +14,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private Triangle mTriangle;
     private Square   mSquare;
+    private Quadrilateral mQuadrilateral;
 
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         // Set the background frame color
@@ -23,15 +24,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mTriangle = new Triangle();
         // initialize a square
         mSquare = new Square();
+        // initialize a quadrilateral
+        mQuadrilateral = new Quadrilateral();
     }
 
     public void onDrawFrame(GL10 unused) {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        //System.out.println("test");
-        mTriangle.draw();
-        mSquare.draw();
+        //mTriangle.draw();
+        //mSquare.draw();
+        mQuadrilateral.draw();
     }
 
     public void onSurfaceChanged(GL10 unused, int width, int height) {

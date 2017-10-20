@@ -42,7 +42,7 @@ public class Square {
         // Enable a handle to the triangle vertices
         GLES20.glEnableVertexAttribArray(mPositionHandle);
 
-        // Prepare the triangle coordinate data
+        // Prepare the square coordinate data
         GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
         // get handle to fragment shader's vColor member
@@ -51,8 +51,8 @@ public class Square {
         // Set color for drawing the square
         GLES20.glUniform4fv(mColorHandle, 1, color, 0);
 
-        // Draw the triangle
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vertexCount);
+        // Draw the square
+        GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, squareDrawOrder.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(mPositionHandle);
@@ -64,12 +64,12 @@ public class Square {
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
     static float squareCoords[] = {
-            -0.5f,  -0.75f, 0.0f,   // top left
-            -0.5f, -0.25f, 0.0f,   // bottom left
-            0.5f, -0.75f, 0.0f,   // bottom right
-            0.5f,  -0.25f, 0.0f }; // top right
+            -1.0f,  0.0f, 0.0f,   // top left
+            -1.0f, -1.0f, 0.0f,   // bottom left
+            1.0f, -1.0f, 0.0f,   // bottom right
+            1.0f,  0.0f, 0.0f }; // top right
 
-    private short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
+    private short squareDrawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
 
     float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 
@@ -88,10 +88,10 @@ public class Square {
         // initialize byte buffer for the draw list
         ByteBuffer dlb = ByteBuffer.allocateDirect(
                 // (# of coordinate values * 2 bytes per short)
-                drawOrder.length * 2);
+                squareCoords.length * 2);
         dlb.order(ByteOrder.nativeOrder());
         drawListBuffer = dlb.asShortBuffer();
-        drawListBuffer.put(drawOrder);
+        drawListBuffer.put(squareDrawOrder);
         drawListBuffer.position(0);
 
         int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);

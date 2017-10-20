@@ -7,7 +7,7 @@
     tools:context="com.example.bshiffman5629.reeperg.MainActivity">
 
     <LinearLayout
-        android:id="@+id/PointsLayout"
+        android:id="@+id/pointsLayout"
         android:layout_width="0dp"
         android:layout_height="166dp"
         android:layout_marginLeft="8dp"
@@ -22,13 +22,13 @@
         android:layout_marginEnd="8dp">
 
         <LinearLayout
-            android:id="@+id/Point0CoordsLayout"
+            android:id="@+id/point0CoordsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/Point0X"
+                android:id="@+id/point0X"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -37,7 +37,7 @@
                 android:inputType="numberSigned" />
 
             <EditText
-                android:id="@+id/Point0Y"
+                android:id="@+id/point0Y"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -47,13 +47,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/Point1CoordsLayout"
+            android:id="@+id/point1CoordsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/Point1X"
+                android:id="@+id/point1X"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -62,7 +62,7 @@
                 android:inputType="numberSigned" />
 
             <EditText
-                android:id="@+id/Point1Y"
+                android:id="@+id/point1Y"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -72,13 +72,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/Point2CoordsLayout"
+            android:id="@+id/point2CoordsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/Point2X"
+                android:id="@+id/point2X"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -87,7 +87,7 @@
                 android:inputType="numberSigned" />
 
             <EditText
-                android:id="@+id/Point2Y"
+                android:id="@+id/point2Y"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -97,13 +97,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/Point3CoordsLayout"
+            android:id="@+id/point3CoordsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/Point3X"
+                android:id="@+id/point3X"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -112,7 +112,7 @@
                 android:inputType="numberSigned" />
 
             <EditText
-                android:id="@+id/Point3Y"
+                android:id="@+id/point3Y"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -133,21 +133,21 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Generate"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PointsLayout" />
-
-    <SurfaceView
-        android:id="@+id/MyGLSurfaceView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/background_light"
-        android:backgroundTint="@android:color/background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pointsLayout" />
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/glSurfaceViewID"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GenerateButton"
         app:layout_constraintVertical_bias="0.0"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/GenerateButton" />
+        app:layout_constraintHorizontal_bias="0.0" />
+
 </android.support.constraint.ConstraintLayout>
