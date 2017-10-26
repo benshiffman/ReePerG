@@ -29,7 +29,6 @@ public class Quadrilateral {
     private int mPositionHandle;
     private int mColorHandle;
 
-    private final int vertexCount = quadrilateralCoords.length / COORDS_PER_VERTEX;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
     public void draw() {

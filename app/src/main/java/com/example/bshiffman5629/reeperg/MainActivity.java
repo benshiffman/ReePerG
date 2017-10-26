@@ -29,7 +29,9 @@ public class MainActivity extends Activity {
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
-        setContentView(R.layout.activity_main);
+        mGLView = new MyGLSurfaceView(this);
+        setContentView(mGLView);
+        //setContentView(R.layout.activity_main);
         //mGLView = findViewById(R.id.glSurfaceViewID);
     }
 }
