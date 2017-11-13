@@ -46,8 +46,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
         //coordinates for e start in top left corner of screen
         //up
         if(y<getHeight()/4 && getWidth()/4<x && x<getWidth()*3/4 && MotionEvent.ACTION_DOWN == e.getAction()){
-            for(int i=1; i<=(MyGLRenderer.shapeCoords.length+1)/3-1; i+=3){
+            for(int i=1; i<=MyGLRenderer.shapeCoords.length; i+=3){
                 MyGLRenderer.shapeCoords[i]+=0.05f;
+                //MyGLRenderer.mainInstance.mShape.shapeCoords[i]+=0.05f;
             }
             Log.d("Up x",""+MyGLRenderer.shapeCoords[0]);
             Log.d("Up y",""+MyGLRenderer.shapeCoords[1]);
@@ -55,7 +56,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         }
         //down
         else if(y>getHeight()*3/4 && getWidth()/4<x && x<getWidth()*3/4 && MotionEvent.ACTION_DOWN == e.getAction()){
-            for(int i=1; i<=(MyGLRenderer.shapeCoords.length+1)/3-1; i+=3){
+            for(int i=1; i<=MyGLRenderer.shapeCoords.length; i+=3){
                 MyGLRenderer.shapeCoords[i]-=0.05f;
             }
             requestRender();
@@ -64,7 +65,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         }
         //left
         else if(x<getWidth()/4 && getHeight()/4<y && y<getHeight()*3/4 && MotionEvent.ACTION_DOWN == e.getAction()){
-            for(int i=0; i<=(MyGLRenderer.shapeCoords.length+1)/3-1; i+=3){
+            for(int i=0; i<=MyGLRenderer.shapeCoords.length-1; i+=3){
                 MyGLRenderer.shapeCoords[i]-=0.05f;
             }
             requestRender();
@@ -73,7 +74,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         }
         //right
         else if(x>getWidth()*3/4 && getHeight()/4<y && y<getHeight()*3/4 && MotionEvent.ACTION_DOWN == e.getAction()){
-            for(int i=0; i<=(MyGLRenderer.shapeCoords.length+1)/3-1; i+=3){
+            for(int i=0; i<=MyGLRenderer.shapeCoords.length-1; i+=3){
                 MyGLRenderer.shapeCoords[i]+=0.05f;
             }
             requestRender();

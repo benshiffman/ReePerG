@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
+import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -14,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
-
+    //public static MyGLRenderer mainInstance;
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     /*private final float[] mMVPMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
@@ -29,11 +30,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Paths           mPaths;
 
     static float shapeCoords[] = { //counter-clockwise
-            /*0.0f,  0.65f, 0.0f,*/   // 0
-            -0.25f, 0.5f, 0.0f,   // 1
-            -0.25f, -0.5f, 0.0f,  // 2
-            0.25f,  -0.5f, 0.0f, // 3
-            0.25f, 0.5f, 0.0f }; // 4
+            -0.25f, 0.5f, 0.0f,   // 0 -- 0, 1, 2
+            -0.25f, -0.5f, 0.0f,  // 1 -- 3, 4, 5
+            0.25f,  -0.5f, 0.0f, // 2 -- 6, 7, 8
+            0.25f, 0.5f, 0.0f }; // 3 -- 9, 10, 11
     private short shapeDrawOrder[] = {0, 1, 2,
                                       0, 2, 3/*,
                                       0, 3, 4*/};
@@ -49,6 +49,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             0, 3, 4};
 
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+        //mainInstance = this;
         // Set the background frame color
         GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -59,7 +60,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // initialize a quadrilateral
         mQuadrilateral = new Quadrilateral();
         //initialize a custom shape
-        mShape = new Shape(shapeCoords, shapeDrawOrder);
+        //dont fuckin call moving objects on surface created
         //initialize a new path
         mPaths = new Paths(pathsCoords, pathsDrawOrder);
     }
@@ -93,8 +94,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //mTriangle.draw();
         //mSquare.draw();
         //mQuadrilateral.draw();
+        //mShape.shapeCoords = shapeCoords;
+        mShape = new Shape(shapeCoords, shapeDrawOrder);
         mShape.draw(/*mMVPMatrix, scratch*/);
         //mPaths.draw();
+        Log.d("Test",""+"Success");
     }
 
     @Override
@@ -121,7 +125,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         return shader;
     }
 
-    public volatile float mAngle;
+    /*public volatile float mAngle;
 
     public float getAngle() {
         return mAngle;
@@ -129,6 +133,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     public void setAngle(float angle) {
         mAngle = angle;
-    }
+    }*/
 
 }

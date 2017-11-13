@@ -52,7 +52,7 @@ public class Shape {
 
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
-    float shapeCoords[];
+    public float shapeCoords[];
 
     private short drawOrder[];// order to draw vertices
 
@@ -89,10 +89,10 @@ public class Shape {
         // get handle to vertex shader's vPosition member
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
 
-        // Enable a handle to the triangle vertices
+        // Enable a handle to the shape's vertices
         GLES20.glEnableVertexAttribArray(mPositionHandle);
 
-        // Prepare the triangle coordinate data
+        // Prepare the shape coordinate data
         GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 vertexStride, vertexBuffer);
@@ -100,7 +100,7 @@ public class Shape {
         // get handle to fragment shader's vColor member
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
 
-        // Set color for drawing the triangle
+        // Set color for drawing the shape
         GLES20.glUniform4fv(mColorHandle, 1, color, 0);
 
         // get handle to shape's transformation matrix
