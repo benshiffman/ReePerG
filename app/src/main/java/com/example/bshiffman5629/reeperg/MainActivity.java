@@ -11,18 +11,6 @@ public class MainActivity extends Activity {
 
     private GLSurfaceView mGLView;
 
-    /*private EditText point0X;
-    private EditText point0Y;
-
-    private EditText point1X;
-    private EditText point1Y;
-
-    private EditText point2X;
-    private EditText point2Y;
-
-    private EditText point3X;
-    private EditText point3Y;*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

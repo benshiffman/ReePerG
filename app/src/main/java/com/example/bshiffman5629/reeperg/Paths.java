@@ -41,7 +41,7 @@ public class Paths {
 
     private short drawOrder[];
 
-    float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+    float color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
     public Paths(float coords[], short indices[]) {
         Coords = coords;
@@ -74,6 +74,7 @@ public class Paths {
         GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
         GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+        GLES20.glLineWidth(0.5f);
         GLES20.glDrawElements(GLES20.GL_LINES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }

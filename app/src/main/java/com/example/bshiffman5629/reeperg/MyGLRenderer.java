@@ -1,10 +1,12 @@
 package com.example.bshiffman5629.reeperg;
 
+import android.content.res.Resources;
 import android.graphics.Path;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -16,12 +18,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
     //public static MyGLRenderer mainInstance;
-    // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
-    /*private final float[] mMVPMatrix = new float[16];
-    private final float[] mProjectionMatrix = new float[16];
-    private final float[] mViewMatrix = new float[16];
 
-    private float[] mRotationMatrix = new float[16];*/
+    DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+    public float xv = (float)metrics.heightPixels/((float)metrics.widthPixels);
 
     private Triangle        mTriangle;
     private Square          mSquare;
@@ -38,15 +37,33 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                                       0, 2, 3/*,
                                       0, 3, 4*/};
 
-    static float pathsCoords[] = { //counter-clockwise
-            0.0f,  0.75f, 0.0f,   // 0
-            -0.5f, 0.5f, 0.0f,   // 1
-            -0.5f, 0.0f, 0.0f,  // 2
-            0.5f,  0.0f, 0.0f, // 3
-            0.5f, 0.5f, 0.0f }; // 4
-    private short pathsDrawOrder[] = {0, 1, 2,
-            0, 2, 3,
-            0, 3, 4};
+    float pathsCoords[] = {
+            //Dpad
+            -0.4f-xv,           -1f/3f,     0f,
+            -0.4f-(2f/3f)*xv,   -1f/3f,     0f,
+            -0.4f-(1f/3f)*xv,   -1f/3f,     0f,
+            -0.4f,              -1f/3f,     0f,
+            -0.4f-xv,           -2f/3f,     0f,
+            -0.4f,              -2f/3f,     0f,
+            -0.4f-xv,           -1f,        0f,
+            -0.4f-(2f/3f)*xv,   -1f,        0f,
+            -0.4f-(1f/3f)*xv,   -1f,        0f,
+            -0.4f,              -1f,        0f,
+
+            //Spell Grid
+            1f-xv,              0f,         0f,
+            1f-(2f/3f)*xv,      0f,         0f,
+            1f-(1f/3f)*xv,      0f,         0f,
+            1f,                 0f,         0f,
+            1f-xv,              -1f/3f,     0f,
+            1f,                 -1f/3f,     0f,
+            1f-xv,              -2f/3f,     0f,
+            1f,                 -2f/3f,     0f,
+            1f-xv,              -1f,        0f,
+            1f-(2f/3f)*xv,      -1f,        0f,
+            1f-(1f/3f)*xv,      -1f,        0f,
+            1f,                 -1f,        0f };
+    private short pathsDrawOrder[] = {0, 6, 1, 7, 2, 8, 3, 9, 0, 3, 4, 5, 6, 9, 10, 18, 11, 19, 12, 20, 13, 21, 10, 13, 14, 15, 16, 17, 18, 21};
 
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         //mainInstance = this;
@@ -60,56 +77,27 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // initialize a quadrilateral
         mQuadrilateral = new Quadrilateral();
         //initialize a custom shape
-        //dont fuckin call moving objects on surface created
+        mShape = new Shape(shapeCoords, shapeDrawOrder);
         //initialize a new path
         mPaths = new Paths(pathsCoords, pathsDrawOrder);
     }
 
     public void onDrawFrame(GL10 unused) {
-        //float[] scratch = new float[16];
 
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-        // Set the camera position (View matrix)
-        /*Matrix.setLookAtM(mViewMatrix, 0, //Matrix?, wut
-                            0,      0,      -3,     //X tilt        Y tilt      Z tilt (zoom?) only -3
-                            0f,     0f,     0f,     //smush X       smush Y     smush Z
-                            0.0f,   1.0f,   0.0f);  //X vector      Y vector    Z vector*/
-
-        // Calculate the projection and view transformation
-        //Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-
-        // Create a rotation transformation for the triangle
-        //long time = SystemClock.uptimeMillis() % 4000L;
-        //
-        // float angle = 0.090f * ((int) time);
-        //Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, 1.0f);
-
-        // Combine the rotation matrix with the projection and camera view
-        // Note that the mMVPMatrix factor *must be first* in order
-        // for the matrix multiplication product to be correct.
-        //Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
-
         //mTriangle.draw();
         //mSquare.draw();
         //mQuadrilateral.draw();
-        //mShape.shapeCoords = shapeCoords;
-        mShape = new Shape(shapeCoords, shapeDrawOrder);
         mShape.draw(/*mMVPMatrix, scratch*/);
-        //mPaths.draw();
+        mPaths.draw();
         Log.d("Test",""+"Success");
     }
 
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
-
-        //float ratio = (float) width / height;
-
-        // this projection matrix is applied to object coordinates
-        // in the onDrawFrame() method
-        //Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
     }
 
     public static int loadShader(int type, String shaderCode){
@@ -124,15 +112,4 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         return shader;
     }
-
-    /*public volatile float mAngle;
-
-    public float getAngle() {
-        return mAngle;
-    }
-
-    public void setAngle(float angle) {
-        mAngle = angle;
-    }*/
-
 }

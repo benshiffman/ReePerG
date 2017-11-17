@@ -50,9 +50,9 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 MyGLRenderer.shapeCoords[i]+=0.05f;
                 //MyGLRenderer.mainInstance.mShape.shapeCoords[i]+=0.05f;
             }
+            requestRender();
             Log.d("Up x",""+MyGLRenderer.shapeCoords[0]);
             Log.d("Up y",""+MyGLRenderer.shapeCoords[1]);
-            requestRender();
         }
         //down
         else if(y>getHeight()*3/4 && getWidth()/4<x && x<getWidth()*3/4 && MotionEvent.ACTION_DOWN == e.getAction()){
@@ -66,7 +66,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         //left
         else if(x<getWidth()/4 && getHeight()/4<y && y<getHeight()*3/4 && MotionEvent.ACTION_DOWN == e.getAction()){
             for(int i=0; i<=MyGLRenderer.shapeCoords.length-1; i+=3){
-                MyGLRenderer.shapeCoords[i]-=0.05f;
+                MyGLRenderer.shapeCoords[i]-=0.025f;
             }
             requestRender();
             Log.d("Left x",""+MyGLRenderer.shapeCoords[0]);
@@ -75,36 +75,13 @@ public class MyGLSurfaceView extends GLSurfaceView {
         //right
         else if(x>getWidth()*3/4 && getHeight()/4<y && y<getHeight()*3/4 && MotionEvent.ACTION_DOWN == e.getAction()){
             for(int i=0; i<=MyGLRenderer.shapeCoords.length-1; i+=3){
-                MyGLRenderer.shapeCoords[i]+=0.05f;
+                MyGLRenderer.shapeCoords[i]+=0.025f;
             }
             requestRender();
             Log.d("Right x",""+MyGLRenderer.shapeCoords[0]);
             Log.d("Right y",""+MyGLRenderer.shapeCoords[1]);
         }
-        /*switch (e.getAction()) {
-            case MotionEvent.ACTION_MOVE:
 
-                float dx = x - mPreviousX;
-                float dy = y - mPreviousY;
-
-                // reverse direction of rotation above the mid-line
-                if (y > getHeight() / 2) {
-                    dx = dx * -1 ;
-                }
-
-                // reverse direction of rotation to left of the mid-line
-                if (x < getWidth() / 2) {
-                    dy = dy * -1 ;
-                }
-
-                mRenderer.setAngle(
-                        mRenderer.getAngle() +
-                                ((dx + dy) * TOUCH_SCALE_FACTOR));
-                requestRender();
-        }*/
-
-        mPreviousX = x;
-        mPreviousY = y;
         return true;
     }
 }
