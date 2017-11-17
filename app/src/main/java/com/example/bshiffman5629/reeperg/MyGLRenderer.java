@@ -17,7 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
-    //public static MyGLRenderer mainInstance;
+    public static MyGLRenderer mainInstance;
 
     DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
     public float xv = (float)metrics.heightPixels/((float)metrics.widthPixels);
@@ -25,7 +25,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Triangle        mTriangle;
     private Square          mSquare;
     private Quadrilateral   mQuadrilateral;
-    private Shape           mShape;
+    public  Shape           mShape;
     private Paths           mPaths;
 
     static float shapeCoords[] = { //counter-clockwise
@@ -66,7 +66,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private short pathsDrawOrder[] = {0, 6, 1, 7, 2, 8, 3, 9, 0, 3, 4, 5, 6, 9, 10, 18, 11, 19, 12, 20, 13, 21, 10, 13, 14, 15, 16, 17, 18, 21};
 
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        //mainInstance = this;
+        mainInstance = this;
         // Set the background frame color
         GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
