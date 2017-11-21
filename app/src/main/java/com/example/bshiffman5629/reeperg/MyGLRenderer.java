@@ -80,7 +80,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //mQuadrilateral.draw();
         mShape.draw();
         mPaths.draw();
-        Log.d("Test",""+"Success");
     }
 
     @Override
