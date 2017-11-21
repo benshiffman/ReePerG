@@ -43,11 +43,11 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         if(x > 0f && x < 1f/10f && y > 2f/3f && y < 5f/6f){                                              //Top Left
             for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
                 //float yeet = (float) Math.sqrt();
-                MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += -0.025;
+                MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += -0.0707f;
             }
             for(int y2 = 1; y2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; y2 += 3) {
                 //float yeet = (float) Math.sqrt();
-                MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += 0.025;
+                MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += 0.0707f;
             }
         }
         if(x > 1f/10f && x < 2f/10f && y > 2f/3f && y < 5f/6f){                                          //Top Middle
@@ -57,10 +57,10 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         }
         if(x > 2f/10f && x < 3f/10f && y > 2f/3f && y < 5f/6f){                                         //Top Right
             for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
-                MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += 0.025f;
+                MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += 0.0707f;
             }
             for(int y2 = 1; y2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; y2 += 3){
-                MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += 0.025f;
+                MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += 0.0707f;
             }
         }
         if(x > 0f && x < 1f/10f && y > 5f/6f && y < 1f){                                                 //Left
