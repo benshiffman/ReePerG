@@ -1,6 +1,6 @@
 package com.example.bshiffman5629.reeperg;
 
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -58,24 +58,24 @@ public class Paths {
         drawListBuffer = dlb.asShortBuffer();
         drawListBuffer.put(drawOrder);
         drawListBuffer.position(0);
-        mProgram = GLES20.glCreateProgram();
-        int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-        GLES20.glAttachShader(mProgram, vertexShader);
-        GLES20.glAttachShader(mProgram, fragmentShader);
-        GLES20.glLinkProgram(mProgram);
+        mProgram = GLES30.glCreateProgram();
+        int vertexShader = MyGLRenderer.loadShader(GLES30.GL_VERTEX_SHADER, vertexShaderCode);
+        int fragmentShader = MyGLRenderer.loadShader(GLES30.GL_FRAGMENT_SHADER, fragmentShaderCode);
+        GLES30.glAttachShader(mProgram, vertexShader);
+        GLES30.glAttachShader(mProgram, fragmentShader);
+        GLES30.glLinkProgram(mProgram);
     }
 
     public void draw() {
-        GLES20.glUseProgram(mProgram);
+        GLES30.glUseProgram(mProgram);
 
-        mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-        GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
-        mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
-        GLES20.glUniform4fv(mColorHandle, 1, color, 0);
-        GLES20.glLineWidth(0.5f);
-        GLES20.glDrawElements(GLES20.GL_LINES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
-        GLES20.glDisableVertexAttribArray(mPositionHandle);
+        mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
+        GLES30.glEnableVertexAttribArray(mPositionHandle);
+        GLES30.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX, GLES30.GL_FLOAT, false, vertexStride, vertexBuffer);
+        mColorHandle = GLES30.glGetUniformLocation(mProgram, "vColor");
+        GLES30.glUniform4fv(mColorHandle, 1, color, 0);
+        GLES30.glLineWidth(0.5f);
+        GLES30.glDrawElements(GLES30.GL_LINES, drawOrder.length, GLES30.GL_UNSIGNED_SHORT, drawListBuffer);
+        GLES30.glDisableVertexAttribArray(mPositionHandle);
     }
 }

@@ -7,6 +7,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.EditText;
@@ -38,9 +39,11 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     }
     @Override
     public boolean onDown(MotionEvent event) {
+        Log.d("Event", "ONDOWN");
         float x = (float)(event.getX()/metrics.widthPixels);
         float y = (float)(event.getY()/metrics.heightPixels);
         if(x > 0f && x < 1f/10f && y > 2f/3f && y < 5f/6f){                                              //Top Left
+            Log.d("top", "Left");
             for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
                 //float yeet = (float) Math.sqrt();
                 MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += -0.0707f;
@@ -51,11 +54,13 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             }
         }
         if(x > 1f/10f && x < 2f/10f && y > 2f/3f && y < 5f/6f){                                          //Top Middle
+            Log.d("top", "mid");
             for(int y2 = 1; y2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; y2 += 3){
                 MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += 0.1f;
             }
         }
         if(x > 2f/10f && x < 3f/10f && y > 2f/3f && y < 5f/6f){                                         //Top Right
+            Log.d("top", "right");
             for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
                 MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += 0.0707f;
             }
@@ -64,16 +69,19 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             }
         }
         if(x > 0f && x < 1f/10f && y > 5f/6f && y < 1f){                                                 //Left
+            Log.d("mid", "Left");
             for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
                 MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += -0.1f;
             }
         }
         if(x > 2f/10f && x < 3f/10f && y > 5f/6f && y < 1f){                                             //Right
+            Log.d("mid", "right");
             for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
                 MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += 0.1f;
             }
         }
         if(x >  1f/10f && x < 2f/10f && y > 5f/6f && y < 1f){                                              //Down (Temporary)
+            Log.d("down", "blyat");
             for(int y2 = 1; y2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; y2 += 3) {
                 MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += -0.1f;
             }
