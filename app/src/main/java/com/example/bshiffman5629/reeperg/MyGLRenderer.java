@@ -21,10 +21,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
     public float xv = (float)metrics.heightPixels/((float)metrics.widthPixels);
-
-    private Triangle        mTriangle;
-    private Square          mSquare;
-    private Quadrilateral   mQuadrilateral;
     public  Shape           mShape;
     private Paths           mPaths;
 
@@ -69,13 +65,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mainInstance = this;
         // Set the background frame color
         GLES30.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-        // initialize a triangle
-        mTriangle = new Triangle();
-        // initialize a square
-        mSquare = new Square();
-        // initialize a quadrilateral
-        mQuadrilateral = new Quadrilateral();
         //initialize a custom shape
         mShape = new Shape(shapeCoords, shapeDrawOrder);
         //initialize a new path
