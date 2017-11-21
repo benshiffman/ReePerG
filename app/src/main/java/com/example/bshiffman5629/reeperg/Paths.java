@@ -74,7 +74,7 @@ public class Paths {
         GLES30.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX, GLES30.GL_FLOAT, false, vertexStride, vertexBuffer);
         mColorHandle = GLES30.glGetUniformLocation(mProgram, "vColor");
         GLES30.glUniform4fv(mColorHandle, 1, color, 0);
-        GLES30.glLineWidth(0.5f);
+        GLES30.glLineWidth(5f);
         GLES30.glDrawElements(GLES30.GL_LINES, drawOrder.length, GLES30.GL_UNSIGNED_SHORT, drawListBuffer);
         GLES30.glDisableVertexAttribArray(mPositionHandle);
     }
