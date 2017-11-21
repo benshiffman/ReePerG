@@ -13,21 +13,11 @@ import android.view.MotionEvent;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class MainActivity extends Activity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
     DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
 
     private GestureDetectorCompat mDetector;
     private GLSurfaceView mGLView;
-
-    Timer timer = new Timer();
-    class GameLoopTask extends TimerTask {
-        public void run() {
-            //GAME LOOP
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +29,6 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         setContentView(mGLView);
         mDetector = new GestureDetectorCompat(this, this);
         mDetector.setOnDoubleTapListener(this);
-
-        final int FPS = 40;
-        TimerTask updateBall = new GameLoopTask();
-        timer.scheduleAtFixedRate(updateBall, 0, 1000/FPS);
     }
 
     @Override
@@ -54,7 +40,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     @Override
     public boolean onDown(MotionEvent event) {
         Log.d("Event", "ONDOWN");
-        float x = (float)((160+event.getX())/metrics.widthPixels);
+        float x = (float)(event.getX()/metrics.widthPixels);
         float y = (float)(event.getY()/metrics.heightPixels);
         if(x > 0f && x < 1f/10f && y > 2f/3f && y < 5f/6f){                                              //Top Left
             Log.d("top", "Left");
@@ -102,44 +88,28 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         }
         return true;
     }
-
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
         return false;
     }
-
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
         return false;
     }
-
     @Override
     public boolean onDoubleTapEvent(MotionEvent motionEvent) {
         return false;
     }
-
     @Override
-    public void onShowPress(MotionEvent motionEvent) {
-
-    }
-
+    public void onShowPress(MotionEvent motionEvent) {}
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
         return false;
     }
-
     @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
-    }
-
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {return false;}
     @Override
-    public void onLongPress(MotionEvent motionEvent) {
-
-    }
-
+    public void onLongPress(MotionEvent motionEvent) {}
     @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
-    }
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {return false;}
 }
