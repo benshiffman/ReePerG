@@ -13,14 +13,27 @@ import android.view.MotionEvent;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends Activity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
     DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
 
+    Timer timer = new Timer();
+
     private GestureDetectorCompat mDetector;
     private GLSurfaceView mGLView;
+    class GameLoopTask extends TimerTask {
+        public void run() {
+            //GAME LOOP
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final int FPS = 40;
+        TimerTask updateBall = new GameLoopTask();
+        timer.scheduleAtFixedRate(updateBall, 0, 1000/FPS);
         super.onCreate(savedInstanceState);
 
         // Create a GLSurfaceView instance and set it
