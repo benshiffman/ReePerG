@@ -80,32 +80,42 @@ public class Gestures {
         }
     }
     public void update(Point with) {//call this every time a new point is given
-        int newCord = cordOf(with);
-        //Log.d("size: ", Integer.toString(gesture.size()));
-        if (gesture.size() > 1) {
-            if (gesture.get(gesture.size() - 2) != newCord) {
-                if (compare(firstDir, findDir(firstPt, with)) > 20) {
-                    gesture.add(newCord);
-                    firstDir = findDir(lastPt, with);
-                    firstPt = with;
-                }else {
-                    gesture.remove(gesture.size() - 1);
+        if (started) {
+            int newCord = cordOf(with);
+            if (newCord == -1) {
+                return;
+            }
+            //Log.d("size: ", Integer.toString(gesture.size()));
+            if (gesture.size() > 1) {
+                if (gesture.get(gesture.size() - 2) != newCord) {
+                    if (compare(firstDir, findDir(firstPt, with)) > 20) {
+                        gesture.add(newCord);
+                        firstDir = findDir(lastPt, with);
+                        firstPt = with;
+                    } else {
+                        gesture.remove(gesture.size() - 1);
+                        gesture.add(newCord);
+                        firstDir = findDir(lastPt, with);
+                        firstPt = with;
+                    }
+                }
+            } else {
+                if (gesture.get(0) != newCord) {
                     gesture.add(newCord);
                     firstDir = findDir(lastPt, with);
                     firstPt = with;
                 }
             }
+            lastPt = with;
         }else {
-            if (gesture.get(0) != newCord) {
-                gesture.add(newCord);
-                firstDir = findDir(lastPt, with);
-                firstPt = with;
-            }
+            reInit(with);
         }
-        lastPt = with;
     }
-    public void end() {
-        gesture.remove(gesture.size() - 1);
+    public ArrayList<Integer> end() {
+        if (gesture.size() > 0) {
+            gesture.remove(gesture.size() - 1);
+        }
         started = false;
+        return gesture;
     }
 }
