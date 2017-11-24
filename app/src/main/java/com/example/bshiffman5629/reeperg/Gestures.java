@@ -83,12 +83,13 @@ public class Gestures {
         if (started) {
             int newCord = cordOf(with);
             if (newCord == -1) {
+                lastPt = with;
                 return;
             }
             //Log.d("size: ", Integer.toString(gesture.size()));
             if (gesture.size() > 1) {
                 if (gesture.get(gesture.size() - 2) != newCord) {
-                    if (compare(firstDir, findDir(firstPt, with)) > 20) {
+                    if (Math.abs(compare(firstDir, findDir(firstPt, with))) > 20) {
                         gesture.add(newCord);
                         firstDir = findDir(lastPt, with);
                         firstPt = with;
@@ -112,8 +113,10 @@ public class Gestures {
         }
     }
     public ArrayList<Integer> end() {
-        if (gesture.size() > 0) {
-            gesture.remove(gesture.size() - 1);
+        if (gesture.size() > 2) {
+            if (gesture.get(gesture.size()-1) == gesture.get(gesture.size() - 2)) {
+                gesture.remove(gesture.size() - 1);
+            }
         }
         started = false;
         return gesture;

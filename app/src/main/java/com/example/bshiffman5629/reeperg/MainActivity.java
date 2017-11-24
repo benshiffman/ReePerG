@@ -66,17 +66,95 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     private void checkGesture(MotionEvent event) {//WIP
         if (event.getAction() == MotionEvent.ACTION_UP) {
             ArrayList<Integer> gestureValues = curGesture.end();
+            float pos[] = new float[gestureValues.size()*3];
+            short order[] = new short[gestureValues.size()*2];
+            float xv = (float)metrics.heightPixels/(float)metrics.widthPixels;
             for (int i = 0; i < gestureValues.size(); i++) {
-                Log.d("gestureVal["  + Integer.toString(i) + "] = ", Integer.toString(gestureValues.get(i)));
+                int v = gestureValues.get(i);
+                Log.d("gestureVal[" + Integer.toString(i) + "] = ", Integer.toString(v));
+                if (v == 0) {
+                    pos[i*3] = 1f - 5f*xv/6f;
+                    pos[i*3 + 1] = -1f/6f;
+                }else if (v == 1) {
+                    pos[i*3] = 1f - 5f*xv/6f;
+                    pos[i*3 + 1] = -0.5f;
+                }else if (v == 2) {
+                    pos[i*3] = 1f - 5f*xv/6f;
+                    pos[i*3 + 1] = -5f/6f;
+                }else if (v == 3) {
+                    pos[i*3] = 1f - xv/2f;
+                    pos[i*3 + 1] = -1f/6f;
+                }else if (v == 4) {
+                    pos[i*3] = 1f - xv/2f;
+                    pos[i*3 + 1] = -0.5f;
+                }else if (v == 5) {
+                    pos[i*3] = 1f - xv/2f;
+                    pos[i*3 + 1] = -5f/6f;
+                }else if (v == 6) {
+                    pos[i*3] = 1f - 1f*xv/6f;
+                    pos[i*3 + 1] = -1f/6f;
+                }else if (v == 7) {
+                    pos[i*3] = 1f - 1f*xv/6f;
+                    pos[i*3 + 1] = -0.5f;
+                }else if (v == 8) {
+                    pos[i*3] = 1f - 1f*xv/6f;
+                    pos[i*3 + 1] = -5f/6f;
+                }
+                pos[i*3 + 2] = 0.0f;
+                if (i>0) {
+                    order[i*2] = (short) (i-1);
+                    order[i*2 + 1] = (short) i;
+                }
             }
+            MyGLRenderer.mainInstance.gesturePath.coords = pos;
+            MyGLRenderer.mainInstance.gesturePath.drawOrder = order;
         }else {
             if (curGesture.bounds.contains((int) event.getX(), (int) event.getY())) {
                 curGesture.update(new Point((int) event.getX(), (int) event.getY()));
             }else if (curGesture.started) {
                 ArrayList<Integer> gestureValues = curGesture.end();
+                float pos[] = new float[gestureValues.size()*3];
+                short order[] = new short[gestureValues.size()*2];
+                float xv = (float)metrics.heightPixels/(float)metrics.widthPixels;
                 for (int i = 0; i < gestureValues.size(); i++) {
-                    Log.d("gestureVal["  + Integer.toString(i) + "] = ", Integer.toString(gestureValues.get(i)));
+                    int v = gestureValues.get(i);
+                    Log.d("gestureVal[" + Integer.toString(i) + "] = ", Integer.toString(v));
+                    if (v == 0) {
+                        pos[i*3] = 1f - 5f*xv/6f;
+                        pos[i*3 + 1] = -1f/6f;
+                    }else if (v == 1) {
+                        pos[i*3] = 1f - 5f*xv/6f;
+                        pos[i*3 + 1] = -0.5f;
+                    }else if (v == 2) {
+                        pos[i*3] = 1f - 5f*xv/6f;
+                        pos[i*3 + 1] = -5f/6f;
+                    }else if (v == 3) {
+                        pos[i*3] = 1f - xv/2f;
+                        pos[i*3 + 1] = -1f/6f;
+                    }else if (v == 4) {
+                        pos[i*3] = 1f - xv/2f;
+                        pos[i*3 + 1] = -0.5f;
+                    }else if (v == 5) {
+                        pos[i*3] = 1f - xv/2f;
+                        pos[i*3 + 1] = -5f/6f;
+                    }else if (v == 6) {
+                        pos[i*3] = 1f - 1f*xv/6f;
+                        pos[i*3 + 1] = -1f/6f;
+                    }else if (v == 7) {
+                        pos[i*3] = 1f - 1f*xv/6f;
+                        pos[i*3 + 1] = -0.5f;
+                    }else if (v == 8) {
+                        pos[i*3] = 1f - 1f*xv/6f;
+                        pos[i*3 + 1] = -5f/6f;
+                    }
+                    pos[i*3 + 2] = 0.0f;
+                    if (i>0) {
+                        order[i*2] = (short) (i-1);
+                        order[i*2 + 1] = (short) i;
+                    }
                 }
+                MyGLRenderer.mainInstance.gesturePath.coords = pos;
+                MyGLRenderer.mainInstance.gesturePath.drawOrder = order;
             }
         }
     }

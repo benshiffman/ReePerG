@@ -2,6 +2,7 @@ package com.example.bshiffman5629.reeperg;
 
 import android.content.res.Resources;
 import android.graphics.Path;
+import android.graphics.drawable.shapes.PathShape;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -9,12 +10,12 @@ import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-/**
- * Created by bshiffman5629 on 9/27/2017.
- */
+
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
     public static MyGLRenderer mainInstance;
@@ -23,13 +24,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float xv = (float)metrics.heightPixels/((float)metrics.widthPixels);
     public  Shape           mShape;
     private Paths           mPaths;
+    public  Paths           gesturePath;
+    public ArrayList<Integer> gesture = new ArrayList<Integer>();
 
     static float shapeCoords[] = { //counter-clockwise
             -0.25f, 0.5f, 0.0f,   // 0 -- 0, 1, 2
             -0.25f, -0.5f, 0.0f,  // 1 -- 3, 4, 5
             0.25f,  -0.5f, 0.0f, // 2 -- 6, 7, 8
             0.25f, 0.5f, 0.0f }; // 3 -- 9, 10, 11
-    private short shapeDrawOrder[] = {0, 1, 2,
+    private short shapeDrawOrder[] = {0, 1, 2,// I would encourage moving these variables to inside the constructor
                                       0, 2, 3/*,
                                       0, 3, 4*/};
 
@@ -69,6 +72,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mShape = new Shape(shapeCoords, shapeDrawOrder);
         //initialize a new path
         mPaths = new Paths(pathsCoords, pathsDrawOrder);
+
+        gesturePath = new Paths(new float[]{0f, 0f, 0f}, new short[]{0, 0});
+        gesturePath.color = new float[]{1f, 0f, 0f, 1f};
     }
 
     public void onDrawFrame(GL10 unused) {
@@ -80,6 +86,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         //mQuadrilateral.draw();
         mShape.draw();
         mPaths.draw();
+
+        gesturePath.draw();
     }
 
     @Override

@@ -37,20 +37,20 @@ public class Paths {
 
     static final int COORDS_PER_VERTEX = 3;
 
-    float Coords[];
+    float coords[];
 
-    private short drawOrder[];
+    short drawOrder[];
 
     float color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-    public Paths(float coords[], short indices[]) {
-        Coords = coords;
+    public Paths(float cords[], short indices[]) {
+        coords = cords;
         drawOrder = indices;
 
-        ByteBuffer bb = ByteBuffer.allocateDirect(Coords.length * 4);
+        ByteBuffer bb = ByteBuffer.allocateDirect(coords.length * 4);
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.put(Coords);
+        vertexBuffer.put(coords);
         vertexBuffer.position(0);
 
         ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
@@ -68,6 +68,18 @@ public class Paths {
 
     public void draw() {
         GLES30.glUseProgram(mProgram);
+
+        ByteBuffer bb = ByteBuffer.allocateDirect(coords.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer.put(coords);
+        vertexBuffer.position(0);
+
+        ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
+        dlb.order(ByteOrder.nativeOrder());
+        drawListBuffer = dlb.asShortBuffer();
+        drawListBuffer.put(drawOrder);
+        drawListBuffer.position(0);
 
         mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
         GLES30.glEnableVertexAttribArray(mPositionHandle);
