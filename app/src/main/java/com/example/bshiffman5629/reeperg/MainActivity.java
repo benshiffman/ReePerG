@@ -25,19 +25,52 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     Timer timer = new Timer();
 
     Gestures curGesture;
+
+    boolean up = false;
+    boolean left = false;
+    boolean right = false;
+
     private GestureDetectorCompat mDetector;//I really want to delete this
     private GLSurfaceView mGLView;
     class GameLoopTask extends TimerTask {
         public void run() {
             //GAME LOOP
+            MainActivity.this.runOnUiThread(new Runnable() {
+                public void run() {
+                    float acceleration = 0.0f;
+                    if (right) {
+                        acceleration = 0.5f;
+                    }else if (left) {
+                        acceleration = -0.5f;
+                    }
+                    for (int i = 1;i < MyGLRenderer.mainInstance.map.length;i += 2) {
+                        if (MyGLRenderer.mainInstance.mainPlayer.xPos < MyGLRenderer.mainInstance.map[i].x) {
+                            if (MyGLRenderer.mainInstance.mainPlayer.xPos > MyGLRenderer.mainInstance.map[i - 1].x) {
+                                Log.d(Integer.toString((int)MyGLRenderer.mainInstance.mainPlayer.yPos), Integer.toString((int)MyGLRenderer.mainInstance.map[i].y));
+                                if (MyGLRenderer.mainInstance.mainPlayer.yPos > MyGLRenderer.mainInstance.map[i].y) {
+                                    MyGLRenderer.mainInstance.mainPlayer.updatePos(acceleration, -1f, false);
+                                }else {
+                                    if (up) {
+                                        MyGLRenderer.mainInstance.mainPlayer.updatePos(acceleration, 20f, false);
+                                    }else {
+                                        MyGLRenderer.mainInstance.mainPlayer.updatePos(acceleration, 0.0f, true);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final int FPS = 40;
-        TimerTask updateBall = new GameLoopTask();
-        timer.scheduleAtFixedRate(updateBall, 0, 1000/FPS);
+        TimerTask update = new GameLoopTask();
+        timer.scheduleAtFixedRate(update, 500, 1000/FPS);
+
         super.onCreate(savedInstanceState);
 
         // Create a GLSurfaceView instance and set it
@@ -54,13 +87,14 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     @Override
     public boolean onTouchEvent(MotionEvent event){
         checkGesture(event);
+        checkMovement(event);
         this.mDetector.onTouchEvent(event);
         // Be sure to call the superclass implementation
         return super.onTouchEvent(event);
     }
     @Override
     public boolean onDown(MotionEvent event) {
-        checkMovement(event);
+
         return true;
     }
     private void checkGesture(MotionEvent event) {//WIP
@@ -182,45 +216,36 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                }
            }
          */
+        up = false;
+        right = false;
+        left = false;
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            return;
+        }
         float x = (float)(event.getX()/metrics.widthPixels);
         float y = (float)(event.getY()/metrics.heightPixels);
         if(x > 0f && x < 1f/10f && y > 2f/3f && y < 5f/6f){                                              //Top Left
             //Log.d("top", "Left");
-            for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
-                //float yeet = (float) Math.sqrt();
-                MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += -0.0707f;
-            }
-            for(int y2 = 1; y2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; y2 += 3) {
-                //float yeet = (float) Math.sqrt();
-                MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += 0.0707f;
-            }
+            up = true;
+            left = true;
+
         }
         if(x > 1f/10f && x < 2f/10f && y > 2f/3f && y < 5f/6f){                                          //Top Middle
             //Log.d("top", "mid");
-            for(int y2 = 1; y2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; y2 += 3){
-                MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += 0.1f;
-            }
+            up = true;
         }
         if(x > 2f/10f && x < 3f/10f && y > 2f/3f && y < 5f/6f){                                         //Top Right
             //Log.d("top", "right");
-            for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
-                MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += 0.0707f;
-            }
-            for(int y2 = 1; y2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; y2 += 3){
-                MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += 0.0707f;
-            }
+            up = true;
+            right = true;
         }
         if(x > 0f && x < 1f/10f && y > 5f/6f && y < 1f){                                                 //Left
             //Log.d("mid", "Left");
-            for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
-                MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += -0.1f;
-            }
+            left = true;
         }
         if(x > 2f/10f && x < 3f/10f && y > 5f/6f && y < 1f){                                             //Right
             //Log.d("mid", "right");
-            for(int x2 = 0; x2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; x2 += 3){
-                MyGLRenderer.mainInstance.mShape.shapeCoords[x2] += 0.1f;
-            }
+            right = true;
         }
         if(x >  1f/10f && x < 2f/10f && y > 5f/6f && y < 1f){                                              //Down (Temporary)
             //Log.d("down", "blyat");

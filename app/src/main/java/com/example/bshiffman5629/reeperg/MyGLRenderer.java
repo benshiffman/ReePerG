@@ -2,6 +2,7 @@ package com.example.bshiffman5629.reeperg;
 
 import android.content.res.Resources;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.drawable.shapes.PathShape;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
@@ -26,6 +27,27 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Paths           mPaths;
     public  Paths           gesturePath;
     public ArrayList<Integer> gesture = new ArrayList<Integer>();
+
+    public Player mainPlayer;
+
+    Paths floor;
+
+    Point map[] = {
+            new Point(-3250, 3250),
+            new Point(0, 3250),
+            new Point(0, 1500),
+            new Point(1500, 1500),
+            new Point(1500, 2250),
+            new Point(3000, 2250),
+            new Point(3000, 1750),
+            new Point(5750, 1750),
+            new Point(5750, -250),
+            new Point(6500, -250),
+            new Point(6500, 1750),
+            new Point(7750, 1750),
+            new Point(7750, 4000),
+            new Point(10000, 4000)
+    };
 
     static float shapeCoords[] = { //counter-clockwise
             -0.25f, 0.5f, 0.0f,   // 0 -- 0, 1, 2
@@ -75,18 +97,37 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         gesturePath = new Paths(new float[]{0f, 0f, 0f}, new short[]{0, 0});
         gesturePath.color = new float[]{1f, 0f, 0f, 1f};
+
+        mainPlayer = new Player(4000, 1850);
+
+        float mapCoords[] = new float[map.length*3];
+        short order[] = {0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13};
+        //14 pts
+        for (int i = 0; i<map.length;i++) {
+            mapCoords[i*3] = 2f*((float) map[i].x - mainPlayer.xPos)/(float) metrics.widthPixels;
+            mapCoords[i*3 + 1] = 2f*((float) map[i].y - mainPlayer.yPos)/(float) metrics.heightPixels;
+            mapCoords[i*3 + 2] = 0f;
+        }
+        floor = new Paths(mapCoords, order);
     }
 
     public void onDrawFrame(GL10 unused) {
         // Redraw background color
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
 
-        //mTriangle.draw();
-        //mSquare.draw();
-        //mQuadrilateral.draw();
-        mShape.draw();
-        mPaths.draw();
+        //14 pts
+        float mapCoords[] = new float[map.length*3];
+        for (int i = 0; i<map.length;i++) {
+            mapCoords[i*3] = 2f*((float) map[i].x - mainPlayer.xPos)/(float) metrics.widthPixels;
+            mapCoords[i*3 + 1] = 2f*((float) map[i].y - mainPlayer.yPos - 300)/(float) metrics.heightPixels;
+            mapCoords[i*3 + 2] = 0f;
+        }
+        floor.coords = mapCoords;
 
+        floor.draw();
+        mainPlayer.sprite.draw();
+
+        mPaths.draw();
         gesturePath.draw();
     }
 
