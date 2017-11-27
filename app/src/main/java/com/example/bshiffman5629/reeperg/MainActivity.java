@@ -37,29 +37,8 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             //GAME LOOP
             MainActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    float acceleration = 0.0f;
-                    if (right) {
-                        acceleration = 0.5f;
-                    }else if (left) {
-                        acceleration = -0.5f;
-                    }
-                    for (int i = 1;i < MyGLRenderer.mainInstance.map.length;i += 2) {
-                        if (MyGLRenderer.mainInstance.mainPlayer.xPos < MyGLRenderer.mainInstance.map[i].x) {
-                            if (MyGLRenderer.mainInstance.mainPlayer.xPos > MyGLRenderer.mainInstance.map[i - 1].x) {
-                                Log.d(Integer.toString((int)MyGLRenderer.mainInstance.mainPlayer.yPos), Integer.toString((int)MyGLRenderer.mainInstance.map[i].y));
-                                if (MyGLRenderer.mainInstance.mainPlayer.yPos > MyGLRenderer.mainInstance.map[i].y) {
-                                    MyGLRenderer.mainInstance.mainPlayer.updatePos(acceleration, -1f, false);
-                                }else {
-                                    if (up) {
-                                        MyGLRenderer.mainInstance.mainPlayer.updatePos(acceleration, 20f, false);
-                                    }else {
-                                        MyGLRenderer.mainInstance.mainPlayer.updatePos(acceleration, 0.0f, true);
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
+                    updatePlayerPos();
+
                 }
             });
         }
@@ -247,12 +226,51 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             //Log.d("mid", "right");
             right = true;
         }
-        if(x >  1f/10f && x < 2f/10f && y > 5f/6f && y < 1f){                                              //Down (Temporary)
+        if(x >  1f/10f && x < 2f/10f && y > 5f/6f && y < 1f){                                              //Down (Temporary) (blyat)
             //Log.d("down", "blyat");
-            for(int y2 = 1; y2 < MyGLRenderer.mainInstance.mShape.shapeCoords.length; y2 += 3) {
-                MyGLRenderer.mainInstance.mShape.shapeCoords[y2] += -0.1f;
+        }
+    }
+    private void updatePlayerPos() {
+        Player mPlayer = MyGLRenderer.mainInstance.mainPlayer;
+        float uPush = 0f;
+        boolean onGround = false;
+        float acceleration = 0.0f;
+        if (MyGLRenderer.mainInstance.inGround(mPlayer.xPos, mPlayer.yPos)) {
+            mPlayer.yvelocity = 0f;
+            onGround = true;
+            while (MyGLRenderer.mainInstance.inGround(mPlayer.xPos, mPlayer.yPos + 5)) {
+                mPlayer.yPos += 5;
+            }
+            if (up) {
+                uPush += 27.5f;
+            }
+        }else {
+            uPush -= 1.75f;
+        }
+        if (onGround) {
+            if (right) {
+                acceleration = 1f;
+            }else if (left) {
+                acceleration = -1f;
             }
         }
+        if (MyGLRenderer.mainInstance.inGround(mPlayer.xPos - 125, mPlayer.yPos + 20)) {
+            if (acceleration < 0.1) {
+                acceleration = 0.1f;
+            }
+            if (mPlayer.xvelocity < 0) {
+                mPlayer.xvelocity = 0f;
+            }
+        }
+        if (MyGLRenderer.mainInstance.inGround(mPlayer.xPos + 125, mPlayer.yPos + 20)) {
+            if (acceleration > -0.1) {
+                acceleration = -0.1f;
+            }
+            if (mPlayer.xvelocity > 0) {
+                mPlayer.xvelocity = 0f;
+            }
+        }
+        mPlayer.updatePos(acceleration, uPush, onGround);
     }
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
