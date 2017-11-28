@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.shapes.PathShape;
+import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -25,8 +26,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float xv = (float)metrics.heightPixels/((float)metrics.widthPixels);
     private Paths           mPaths;
     public  Paths           gesturePath;
-    //private Shape movementCover;//these are supposed to make the environment covered my ui stuffs, but couldn't figure out opacity/was too lazy
-    //private Shape spellCover;
+    private Shape movementCover;//these are supposed to make the environment covered my ui stuffs, but couldn't figure out opacity/was too lazy
+    private Shape spellCover;
 
     public ArrayList<Integer> gesture = new ArrayList<Integer>();
 
@@ -44,7 +45,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             new Point(3000, 1750),
             new Point(5750, 1750),
             new Point(5750, -250),
-            new Point(6250, -250),
+            new Point(8250, -250),
+            new Point(8250, 500),
+            new Point(6250, 500),
             new Point(6250, 1750),
             new Point(7750, 1750),
             new Point(7750, 4000),
@@ -84,7 +87,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Set the background frame color
         GLES30.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-        /*float gridCoverCoord[] = {
+        GLES30.glEnable(GLES20.GL_BLEND);
+        GLES30.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+        float gridCoverCoord[] = {
                 1f-xv, 0f, 0f,
                 1f-xv, -1f, 0f,
                 1f, -1f, 0f,
@@ -103,8 +109,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         spellCover = new Shape(gridCoverCoord, sqrOrd);
         movementCover = new Shape(mvmtCoverCoord, sqrOrd);
-        spellCover.color = new float[] {1.0f, 1.0f, 1.0f, 0.5f};
-        movementCover.color = new float[] {1.0f, 1.0f, 1.0f, 0.5f};*/
+        spellCover.color = new float[] {1.0f, 1.0f, 1.0f, 0.75f};
+        movementCover.color = new float[] {1.0f, 1.0f, 1.0f, 0.75f};
 
         //initialize a new path
         mPaths = new Paths(pathsCoords, pathsDrawOrder);
@@ -142,8 +148,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mainPlayer.sprite.draw();
 
 
-        //movementCover.draw();
-        //spellCover.draw();
+        movementCover.draw();
+        spellCover.draw();
         mPaths.draw();
         gesturePath.draw();
     }
