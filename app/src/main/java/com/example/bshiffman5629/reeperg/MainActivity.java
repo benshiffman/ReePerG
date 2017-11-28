@@ -255,17 +255,19 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             }
         }
         if (MyGLRenderer.mainInstance.inGround(mPlayer.xPos - 125, mPlayer.yPos + 20)) {
-            if (acceleration < 0.1) {
-                acceleration = 0.1f;
+            if (acceleration < 0) {
+                acceleration = 0;
             }
+            mPlayer.xPos += 5;
             if (mPlayer.xvelocity < 0) {
                 mPlayer.xvelocity = 0f;
             }
         }
         if (MyGLRenderer.mainInstance.inGround(mPlayer.xPos + 125, mPlayer.yPos + 20)) {
-            if (acceleration > -0.1) {
-                acceleration = -0.1f;
+            if (acceleration > 0) {
+                acceleration = 0;
             }
+            mPlayer.xPos -= 5;
             if (mPlayer.xvelocity > 0) {
                 mPlayer.xvelocity = 0f;
             }
