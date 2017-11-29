@@ -1,16 +1,7 @@
 package com.example.bshiffman5629.reeperg;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.opengl.GLSurfaceView;
-import android.support.v4.view.GestureDetectorCompat;
-import android.text.method.Touch;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 
 /**
  * Created by bshiffman5629 on 9/27/2017.

@@ -6,16 +6,12 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.opengl.GLSurfaceView;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
@@ -40,7 +36,6 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             MainActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     updatePlayerPos();
-
                 }
             });
         }
@@ -69,6 +64,11 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     public boolean onTouchEvent(MotionEvent event){
         checkGesture(event);
         checkMovement(event);
+        /*if (event.getPointerCount() >= 2) {
+            Log.d("firstPTCoord", Integer.toString(event.getPointerCoords(0)));
+        }
+        //MotionEventCompat.getActionIndex();
+        Log.d("currentInd: ", Integer.toString());*/
         this.mDetector.onTouchEvent(event);
         // Be sure to call the superclass implementation
         return super.onTouchEvent(event);
@@ -247,7 +247,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         float uPush = 0f;
         boolean onGround = false;
         float acceleration = 0.0f;
-        if (new GroundData(mPlayer.xPos, mPlayer.yPos).odd) {
+        if (new GroundData(mPlayer.xPos, mPlayer.yPos).odd) {//pos sometimes null
             if (mPlayer.yvelocity < 0) {
                 if (mPlayer.yvelocity  < -50) {
                     mPlayer.currentHP += (50 + mPlayer.yvelocity)*2;
@@ -310,21 +310,28 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         mPlayer.updatePos(acceleration, uPush, onGround);
     }
     public void gestureCompleted(short[] gesture) {
+        float cost = 0;
         if (Arrays.equals(gesture, new short[] {1, 4, 7}) || Arrays.equals(gesture, new short[] {1, 7})) {
-            if (MyGLRenderer.mainInstance.mainPlayer.xvelocity < 15) {
-                MyGLRenderer.mainInstance.mainPlayer.xvelocity = 15;
+            cost = 20;
+            if (cost < MyGLRenderer.mainInstance.mainPlayer.currentMP) {
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= cost;
+                if (MyGLRenderer.mainInstance.mainPlayer.xvelocity < 15) {
+                    MyGLRenderer.mainInstance.mainPlayer.xvelocity = 15;
+                }
+                MyGLRenderer.mainInstance.mainPlayer.yvelocity = 0;
+                MyGLRenderer.mainInstance.mainPlayer.currentEffects.add(new StatEffect(StatEType.levitate));
             }
-            MyGLRenderer.mainInstance.mainPlayer.yvelocity = 0;
-            MyGLRenderer.mainInstance.mainPlayer.currentEffects.add(new StatEffect(StatEType.levitate));
-            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 20;
             return;
         }
         if (Arrays.equals(gesture, new short[] {7, 4, 1}) || Arrays.equals(gesture, new short[] {7, 1})) {
-            if (MyGLRenderer.mainInstance.mainPlayer.xvelocity < 15) {
-                MyGLRenderer.mainInstance.mainPlayer.xvelocity = -15;
+            cost = 20;
+            if (cost < MyGLRenderer.mainInstance.mainPlayer.currentMP) {
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= cost;
+                if (MyGLRenderer.mainInstance.mainPlayer.xvelocity < 15) {
+                    MyGLRenderer.mainInstance.mainPlayer.xvelocity = -15;
+                }
+                MyGLRenderer.mainInstance.mainPlayer.currentEffects.add(new StatEffect(StatEType.levitate));
             }
-            MyGLRenderer.mainInstance.mainPlayer.currentEffects.add(new StatEffect(StatEType.levitate));
-            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 20;
             return;
         }
         if (Arrays.equals(gesture, new short[] {4, 7, 3})) {

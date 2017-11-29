@@ -5,12 +5,6 @@ import android.graphics.Rect;
 
 import java.util.ArrayList;
 
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.util.Log;
-
-import java.util.ArrayList;
-
 public class Gestures {
     public Rect bounds;
     public Point firstPt;
