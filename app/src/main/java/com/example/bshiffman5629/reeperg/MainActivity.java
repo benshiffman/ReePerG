@@ -330,7 +330,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         if (Arrays.equals(gesture, new short[] {4, 7, 3})) {
             MyGLRenderer.mainInstance.mainPlayer.xvelocity = 40;
             if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
-                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 40;
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 90;
             }
             MyGLRenderer.mainInstance.mainPlayer.currentMP -= 10;
             return;
@@ -338,7 +338,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         if (Arrays.equals(gesture, new short[] {4, 1, 3})) {
             MyGLRenderer.mainInstance.mainPlayer.xvelocity = -40;
             if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
-                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 40;
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 90;
             }
             MyGLRenderer.mainInstance.mainPlayer.currentMP -= 10;
             return;

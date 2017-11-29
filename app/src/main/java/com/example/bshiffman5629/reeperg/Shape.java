@@ -51,14 +51,14 @@ public class Shape {
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
         vertexBuffer.put(shapeCoords);
-        vertexBuffer.position(0);
+        vertexBuffer.flip();
 
         // initialize byte buffer for the draw list
         ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
         dlb.order(ByteOrder.nativeOrder());
         drawListBuffer = dlb.asShortBuffer();
         drawListBuffer.put(drawOrder);
-        drawListBuffer.position(0);
+        drawListBuffer.flip();
         mProgram = GLES30.glCreateProgram();
         int vertexShader = MyGLRenderer.loadShader(GLES30.GL_VERTEX_SHADER, vertexShaderCode);
         int fragmentShader = MyGLRenderer.loadShader(GLES30.GL_FRAGMENT_SHADER, fragmentShaderCode);
@@ -72,14 +72,14 @@ public class Shape {
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
         vertexBuffer.put(shapeCoords);
-        vertexBuffer.position(0);
+        vertexBuffer.flip();
 
         // initialize byte buffer for the draw list
         ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
         dlb.order(ByteOrder.nativeOrder());
         drawListBuffer = dlb.asShortBuffer();
         drawListBuffer.put(drawOrder);
-        drawListBuffer.position(0);
+        drawListBuffer.flip();
         // Add program to OpenGL ES environment
         GLES30.glUseProgram(mProgram);
 

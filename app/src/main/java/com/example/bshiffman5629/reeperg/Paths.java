@@ -72,16 +72,17 @@ public class Paths {
         ByteBuffer bb = ByteBuffer.allocateDirect(coords.length * 4);
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.rewind();
         vertexBuffer.put(coords);
-        vertexBuffer.position(0);
+        vertexBuffer.flip();
+        //vertexBuffer.position(0);
 
         ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
         dlb.order(ByteOrder.nativeOrder());
         drawListBuffer = dlb.asShortBuffer();
-        drawListBuffer.rewind();//not entirely sure what it does but I think this fixes the crashes. (didn't fix)
+        //not entirely sure what it does but I think this fixes the crashes. (didn't fix)
         drawListBuffer.put(drawOrder);
-        drawListBuffer.position(0);
+        //drawListBuffer.position(0);
+        drawListBuffer.flip();
 
         mPositionHandle = GLES30.glGetAttribLocation(mProgram, "vPosition");
         GLES30.glEnableVertexAttribArray(mPositionHandle);
