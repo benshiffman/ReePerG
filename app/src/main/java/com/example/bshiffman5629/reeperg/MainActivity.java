@@ -15,7 +15,9 @@ import android.view.MotionEvent;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -78,49 +80,55 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     }
     private void checkGesture(MotionEvent event) {//WIP
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            ArrayList<Integer> gestureValues = curGesture.end();
-            float pos[] = new float[gestureValues.size()*3];
-            short order[] = new short[gestureValues.size()*2];
-            float xv = (float)metrics.heightPixels/(float)metrics.widthPixels;
-            for (int i = 0; i < gestureValues.size(); i++) {
-                int v = gestureValues.get(i);
-                Log.d("gestureVal[" + Integer.toString(i) + "] = ", Integer.toString(v));
-                if (v == 0) {
-                    pos[i*3] = 1f - 5f*xv/6f;
-                    pos[i*3 + 1] = -1f/6f;
-                }else if (v == 1) {
-                    pos[i*3] = 1f - 5f*xv/6f;
-                    pos[i*3 + 1] = -0.5f;
-                }else if (v == 2) {
-                    pos[i*3] = 1f - 5f*xv/6f;
-                    pos[i*3 + 1] = -5f/6f;
-                }else if (v == 3) {
-                    pos[i*3] = 1f - xv/2f;
-                    pos[i*3 + 1] = -1f/6f;
-                }else if (v == 4) {
-                    pos[i*3] = 1f - xv/2f;
-                    pos[i*3 + 1] = -0.5f;
-                }else if (v == 5) {
-                    pos[i*3] = 1f - xv/2f;
-                    pos[i*3 + 1] = -5f/6f;
-                }else if (v == 6) {
-                    pos[i*3] = 1f - 1f*xv/6f;
-                    pos[i*3 + 1] = -1f/6f;
-                }else if (v == 7) {
-                    pos[i*3] = 1f - 1f*xv/6f;
-                    pos[i*3 + 1] = -0.5f;
-                }else if (v == 8) {
-                    pos[i*3] = 1f - 1f*xv/6f;
-                    pos[i*3 + 1] = -5f/6f;
+            if (curGesture.started) {
+                ArrayList<Integer> gestureValues = curGesture.end();
+                float pos[] = new float[gestureValues.size() * 3];
+                short order[] = new short[gestureValues.size() * 2];
+                float xv = (float) metrics.heightPixels / (float) metrics.widthPixels;
+                short[] rgestVal = new short[gestureValues.size()];
+                for (int i = 0; i < gestureValues.size(); i++) {
+                    int v = gestureValues.get(i);
+                    //Log.d("gestureVal[" + Integer.toString(i) + "] = ", Integer.toString(v));
+                    if (v == 0) {
+                        pos[i * 3] = 1f - 5f * xv / 6f;
+                        pos[i * 3 + 1] = -1f / 6f;
+                    } else if (v == 1) {
+                        pos[i * 3] = 1f - 5f * xv / 6f;
+                        pos[i * 3 + 1] = -0.5f;
+                    } else if (v == 2) {
+                        pos[i * 3] = 1f - 5f * xv / 6f;
+                        pos[i * 3 + 1] = -5f / 6f;
+                    } else if (v == 3) {
+                        pos[i * 3] = 1f - xv / 2f;
+                        pos[i * 3 + 1] = -1f / 6f;
+                    } else if (v == 4) {
+                        pos[i * 3] = 1f - xv / 2f;
+                        pos[i * 3 + 1] = -0.5f;
+                    } else if (v == 5) {
+                        pos[i * 3] = 1f - xv / 2f;
+                        pos[i * 3 + 1] = -5f / 6f;
+                    } else if (v == 6) {
+                        pos[i * 3] = 1f - 1f * xv / 6f;
+                        pos[i * 3 + 1] = -1f / 6f;
+                    } else if (v == 7) {
+                        pos[i * 3] = 1f - 1f * xv / 6f;
+                        pos[i * 3 + 1] = -0.5f;
+                    } else if (v == 8) {
+                        pos[i * 3] = 1f - 1f * xv / 6f;
+                        pos[i * 3 + 1] = -5f / 6f;
+                    }
+                    pos[i * 3 + 2] = 0.0f;
+                    rgestVal[i] = (short) v;
+                    if (i > 0) {
+
+                        order[i * 2] = (short) (i - 1);
+                        order[i * 2 + 1] = (short) i;
+                    }
                 }
-                pos[i*3 + 2] = 0.0f;
-                if (i>0) {
-                    order[i*2] = (short) (i-1);
-                    order[i*2 + 1] = (short) i;
-                }
+                gestureCompleted(rgestVal);
+                MyGLRenderer.mainInstance.gesturePath.coords = pos;
+                MyGLRenderer.mainInstance.gesturePath.drawOrder = order;
             }
-            MyGLRenderer.mainInstance.gesturePath.coords = pos;
-            MyGLRenderer.mainInstance.gesturePath.drawOrder = order;
         }else {
             if (curGesture.bounds.contains((int) event.getX(), (int) event.getY())) {
                 curGesture.update(new Point((int) event.getX(), (int) event.getY()));
@@ -129,9 +137,10 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 float pos[] = new float[gestureValues.size()*3];
                 short order[] = new short[gestureValues.size()*2];
                 float xv = (float)metrics.heightPixels/(float)metrics.widthPixels;
+                short[] rgestVal = new short[gestureValues.size()];
                 for (int i = 0; i < gestureValues.size(); i++) {
                     int v = gestureValues.get(i);
-                    Log.d("gestureVal[" + Integer.toString(i) + "] = ", Integer.toString(v));
+                    //Log.d("gestureVal[" + Integer.toString(i) + "] = ", Integer.toString(v));
                     if (v == 0) {
                         pos[i*3] = 1f - 5f*xv/6f;
                         pos[i*3 + 1] = -1f/6f;
@@ -161,11 +170,14 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                         pos[i*3 + 1] = -5f/6f;
                     }
                     pos[i*3 + 2] = 0.0f;
+                    rgestVal[i] = (short) v;
                     if (i>0) {
+
                         order[i*2] = (short) (i-1);
                         order[i*2 + 1] = (short) i;
                     }
                 }
+                gestureCompleted(rgestVal);
                 MyGLRenderer.mainInstance.gesturePath.coords = pos;
                 MyGLRenderer.mainInstance.gesturePath.drawOrder = order;
             }
@@ -235,10 +247,15 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         float uPush = 0f;
         boolean onGround = false;
         float acceleration = 0.0f;
-        if (MyGLRenderer.mainInstance.inGround(mPlayer.xPos, mPlayer.yPos)) {
-            mPlayer.yvelocity = 0f;
+        if (new GroundData(mPlayer.xPos, mPlayer.yPos).odd) {
+            if (mPlayer.yvelocity < 0) {
+                if (mPlayer.yvelocity  < -50) {
+                    mPlayer.currentHP += (50 + mPlayer.yvelocity)*2;
+                }
+                mPlayer.yvelocity = 0f;
+            }
             onGround = true;
-            while (MyGLRenderer.mainInstance.inGround(mPlayer.xPos, mPlayer.yPos + 5)) {
+            while (new GroundData(mPlayer.xPos, mPlayer.yPos + 5).odd) {
                 mPlayer.yPos += 5;
             }
             if (up) {
@@ -254,7 +271,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 acceleration = -1f;
             }
         }
-        if (MyGLRenderer.mainInstance.inGround(mPlayer.xPos - 125, mPlayer.yPos + 20)) {
+        if (new GroundData(mPlayer.xPos - 125, mPlayer.yPos + 20).odd) {
             if (acceleration < 0) {
                 acceleration = 0;
             }
@@ -263,7 +280,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 mPlayer.xvelocity = 0f;
             }
         }
-        if (MyGLRenderer.mainInstance.inGround(mPlayer.xPos + 125, mPlayer.yPos + 20)) {
+        if (new GroundData(mPlayer.xPos + 125, mPlayer.yPos + 20).odd) {
             if (acceleration > 0) {
                 acceleration = 0;
             }
@@ -272,7 +289,73 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 mPlayer.xvelocity = 0f;
             }
         }
+        if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
+            if (Math.abs(mPlayer.xvelocity) > 5) {
+                uPush = 0;
+                if (mPlayer.xvelocity > 0 && left) {
+                    acceleration = -1;
+                }else if (mPlayer.xvelocity < 0 && right) {
+                    acceleration = 1;
+                }else {
+                    acceleration = 0;
+                }
+                acceleration += mPlayer.xvelocity * -0.007f;
+            }else {
+                MyGLRenderer.mainInstance.mainPlayer.removeStat(StatEType.levitate);
+            }
+            if (uPush < 0) {
+                uPush = 0;
+            }
+        }
         mPlayer.updatePos(acceleration, uPush, onGround);
+    }
+    public void gestureCompleted(short[] gesture) {
+        if (Arrays.equals(gesture, new short[] {1, 4, 7}) || Arrays.equals(gesture, new short[] {1, 7})) {
+            if (MyGLRenderer.mainInstance.mainPlayer.xvelocity < 15) {
+                MyGLRenderer.mainInstance.mainPlayer.xvelocity = 15;
+            }
+            MyGLRenderer.mainInstance.mainPlayer.yvelocity = 0;
+            MyGLRenderer.mainInstance.mainPlayer.currentEffects.add(new StatEffect(StatEType.levitate));
+            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 20;
+            return;
+        }
+        if (Arrays.equals(gesture, new short[] {7, 4, 1}) || Arrays.equals(gesture, new short[] {7, 1})) {
+            if (MyGLRenderer.mainInstance.mainPlayer.xvelocity < 15) {
+                MyGLRenderer.mainInstance.mainPlayer.xvelocity = -15;
+            }
+            MyGLRenderer.mainInstance.mainPlayer.currentEffects.add(new StatEffect(StatEType.levitate));
+            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 20;
+            return;
+        }
+        if (Arrays.equals(gesture, new short[] {4, 7, 3})) {
+            MyGLRenderer.mainInstance.mainPlayer.xvelocity = 40;
+            if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 40;
+            }
+            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 10;
+            return;
+        }
+        if (Arrays.equals(gesture, new short[] {4, 1, 3})) {
+            MyGLRenderer.mainInstance.mainPlayer.xvelocity = -40;
+            if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 40;
+            }
+            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 10;
+            return;
+        }
+        if (Arrays.equals(gesture, new short[] {2, 7, 3, 1})) {
+            MyGLRenderer.mainInstance.mainPlayer.yvelocity = 30;
+            if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 50;
+            }
+            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 15;
+            return;
+        }
+        /*String pval = "";
+        for (int i = 0; i<gesture.length;i++) {
+            pval += Short.toString(gesture[i]);
+        }
+        Log.d("GestureFailwith:", pval);*/
     }
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {

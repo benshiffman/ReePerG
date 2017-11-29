@@ -118,6 +118,12 @@ public class Gestures {
                 gesture.remove(gesture.size() - 1);
             }
         }
+        for (int i = 0; i + 1<gesture.size();i++) {
+            if (gesture.get(i) == gesture.get(i + 1)) {
+                gesture.remove(i);
+                i--;
+            }
+        }
         started = false;
         return gesture;
     }

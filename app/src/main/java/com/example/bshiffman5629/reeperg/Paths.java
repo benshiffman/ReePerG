@@ -72,12 +72,14 @@ public class Paths {
         ByteBuffer bb = ByteBuffer.allocateDirect(coords.length * 4);
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer.rewind();
         vertexBuffer.put(coords);
         vertexBuffer.position(0);
 
         ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
         dlb.order(ByteOrder.nativeOrder());
         drawListBuffer = dlb.asShortBuffer();
+        drawListBuffer.rewind();//not entirely sure what it does but I think this fixes the crashes. (didn't fix)
         drawListBuffer.put(drawOrder);
         drawListBuffer.position(0);
 
@@ -87,7 +89,7 @@ public class Paths {
         mColorHandle = GLES30.glGetUniformLocation(mProgram, "vColor");
         GLES30.glUniform4fv(mColorHandle, 1, color, 0);
         GLES30.glLineWidth(5f);
-        GLES30.glDrawElements(GLES30.GL_LINES, drawOrder.length, GLES30.GL_UNSIGNED_SHORT, drawListBuffer);
+        GLES30.glDrawElements(GLES30.GL_LINES, drawOrder.length, GLES30.GL_UNSIGNED_SHORT, drawListBuffer);//java.lang.ArrayIndexOutOfBoundsException: remaining() < count < needed
         GLES30.glDisableVertexAttribArray(mPositionHandle);
     }
 }

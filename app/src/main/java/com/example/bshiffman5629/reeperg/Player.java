@@ -1,6 +1,9 @@
 package com.example.bshiffman5629.reeperg;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 public class Player {//width 500 height 1000
     Shape sprite;
@@ -8,6 +11,11 @@ public class Player {//width 500 height 1000
     float yvelocity = 0;
     float xPos;
     float yPos;
+    float currentHP = 500;
+    float maxHP = 500;
+    float currentMP = 500;
+    float maxMP = 500;
+    ArrayList<StatEffect> currentEffects = new ArrayList<>();
     public Player(float x, float y, DisplayMetrics metrics) {
         float shapeCoords[] = { //counter-clockwise
                 -250f/(float) metrics.widthPixels, 400f/(float) metrics.heightPixels, 0.0f,   // 0 -- 0, 1, 2
@@ -35,7 +43,53 @@ public class Player {//width 500 height 1000
                 xvelocity = 30;
             }
         }
+        if (currentHP < maxHP) {
+            currentHP += .05;
+        }
+        if (currentMP < maxMP) {
+            currentMP += 0.2;
+        }
+        if (currentHP > maxHP) {
+            currentHP = maxHP;
+        }
+        if (currentMP > maxMP) {
+            currentMP = maxMP;
+        }
         xPos += xvelocity;
         yPos += yvelocity;
+    }
+    public float hpRatio() {
+        return currentHP/maxHP;
+    }
+    public float mpRatio() {
+        return currentMP / maxMP;
+    }
+    public boolean hasEffect(StatEType type) {
+        for (int i = 0; i < currentEffects.size();i++) {
+            if (currentEffects.get(i).type == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public void removeStat(StatEType type) {
+        for (int i = 0; i < currentEffects.size();i++) {
+            if (currentEffects.get(i).type == type) {
+                currentEffects.remove(i);
+            }
+        }
+    }
+}
+enum StatEType {
+    levitate
+}
+class StatEffect {
+    StatEType type;
+    int remFrames;
+    public StatEffect(StatEType itype) {
+        if (type == StatEType.levitate) {
+            remFrames = 0;
+        }
+        type = itype;
     }
 }

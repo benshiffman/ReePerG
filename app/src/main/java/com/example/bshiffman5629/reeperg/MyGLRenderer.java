@@ -1,16 +1,11 @@
 package com.example.bshiffman5629.reeperg;
 
 import android.content.res.Resources;
-import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.drawable.shapes.PathShape;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
-import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -26,8 +21,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public float xv = (float)metrics.heightPixels/((float)metrics.widthPixels);
     private Paths           mPaths;
     public  Paths           gesturePath;
-    private Shape movementCover;//these are supposed to make the environment covered my ui stuffs, but couldn't figure out opacity/was too lazy
+    private Shape movementCover;
     private Shape spellCover;
+    private Shape barHP;
+    private Shape barMP;
 
     public ArrayList<Integer> gesture = new ArrayList<Integer>();
 
@@ -102,10 +99,27 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 -0.4f, -1f/3f, 0f,
                 -0.4f, -1f, 0f
         };
+        float barHPCoord[] = {
+                -0.4f, -0.8f, 0f,
+                -0.4f, -0.9f, 0f,
+                1f-xv, -0.9f, 0f,
+                1f-xv, -0.8f, 0f
+        };
+        float barMPCoord[] = {
+                -0.4f, -0.9f, 0f,
+                -0.4f, -1f, 0f,
+                1f-xv, -1f, 0f,
+                1f-xv, -0.9f, 0f
+        };
         short sqrOrd[] = {
                 0, 1, 2,
                 0, 2, 3
         };
+
+        barHP = new Shape(barHPCoord, sqrOrd);
+        barMP = new Shape(barMPCoord, sqrOrd);
+        barHP.color = new float[] {0.1f, 0.6f, 0f, 1f};
+        barMP.color = new float[] {0.1f, 0f, 0.7f, 1f};
 
         spellCover = new Shape(gridCoverCoord, sqrOrd);
         movementCover = new Shape(mvmtCoverCoord, sqrOrd);
@@ -121,7 +135,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mainPlayer = new Player(4000, 1850, metrics);
 
         float mapCoords[] = new float[map.length*3];
-        short order[] = {0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13};
+        short order[] = {0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15};
         //14 pts
         for (int i = 0; i<map.length;i++) {
             mapCoords[i*3] = 2f*((float) map[i].x - mainPlayer.xPos)/(float) metrics.widthPixels;//mapPos - playerPos/width (or height)
@@ -144,10 +158,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         }
         floor.coords = mapCoords;
 
+        barHP.shapeCoords[6] = -0.4f + mainPlayer.hpRatio()*(0.4f+1f-xv);
+        barHP.shapeCoords[9] = -0.4f + mainPlayer.hpRatio()*(0.4f+1f-xv);
+        barMP.shapeCoords[6] = -0.4f + mainPlayer.mpRatio()*(0.4f+1f-xv);
+        barMP.shapeCoords[9] = -0.4f + mainPlayer.mpRatio()*(0.4f+1f-xv);
+
         floor.draw();
         mainPlayer.sprite.draw();
 
-
+        barHP.draw();
+        barMP.draw();
         movementCover.draw();
         spellCover.draw();
         mPaths.draw();
@@ -171,8 +191,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         return shader;
     }
-    public boolean inGround(float x, float y) {
-        int crosses = 0;
+}
+class GroundData {
+    float smallestValidDistance = 100000;
+    boolean odd;
+    int crosses = 0;
+    public GroundData(float x, float y) {
+        Point[] map = MyGLRenderer.mainInstance.map;
         for (int i = 1; i < map.length; i++) {
             float fx = (float) map[i - 1].x-x;
             float fy = (float) map[i - 1].y-y;
@@ -180,11 +205,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             float sy = (float) map[i].y-y;
             float intersect = (-10*fx)/(sx-fx);
             if (intersect > 0 && intersect < 10) {
-                if (((sy - fy)*intersect)/10 + fy > 0) {
+                float dist = ((sy - fy)*intersect)/10 + fy;
+                if (Math.abs(dist) < smallestValidDistance) {
+                    smallestValidDistance = dist;
+                }
+                if (dist > 0) {
                     crosses++;
                 }
             }
         }
-        return crosses % 2 == 1;
+        odd = crosses % 2 == 1;
+
     }
 }
