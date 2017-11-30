@@ -62,13 +62,17 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        checkGesture(event);
-        checkMovement(event);
-        /*if (event.getPointerCount() >= 2) {
-            Log.d("firstPTCoord", Integer.toString(event.getPointerCoords(0)));
+        for (int i = 0;i<event.getPointerCount();i++) {
+            int ind = event.findPointerIndex(event.getPointerId(i));
+
+            checkGesture(event.getX(ind), event.getY(ind), event.getAction() == MotionEvent.ACTION_POINTER_UP || event.getAction() == MotionEvent.ACTION_UP, ind);
+            checkMovement(event.getX(ind), event.getY(ind), event.getAction() == MotionEvent.ACTION_POINTER_UP || event.getAction() == MotionEvent.ACTION_UP, ind);
         }
-        //MotionEventCompat.getActionIndex();
-        Log.d("currentInd: ", Integer.toString());*/
+        /*boolean isUp = event.getAction() == MotionEvent.ACTION_UP;
+        Log.d("isUP:", Boolean.toString(isUp));
+        checkGesture(event.getX(), event.getY(), isUp, 0);
+        checkMovement(event.getX(), event.getY(), isUp, 0);*/
+
         this.mDetector.onTouchEvent(event);
         // Be sure to call the superclass implementation
         return super.onTouchEvent(event);
@@ -78,9 +82,10 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 
         return true;
     }
-    private void checkGesture(MotionEvent event) {//WIP
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+    private void checkGesture(float x, float y, boolean tup, int ind) {//WIP
+        if (tup) {
             if (curGesture.started) {
+                Log.d("gestureEnd", "GESTUREEND");
                 ArrayList<Integer> gestureValues = curGesture.end();
                 float pos[] = new float[gestureValues.size() * 3];
                 short order[] = new short[gestureValues.size() * 2];
@@ -130,9 +135,10 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 MyGLRenderer.mainInstance.gesturePath.drawOrder = order;
             }
         }else {
-            if (curGesture.bounds.contains((int) event.getX(), (int) event.getY())) {
-                curGesture.update(new Point((int) event.getX(), (int) event.getY()));
-            }else if (curGesture.started) {
+            if (curGesture.bounds.contains((int) x, (int) y)) {
+                Log.d("gStarted", "checkGesture: ");
+                curGesture.update(new Point((int) x, (int) y), ind);
+            }else if (curGesture.started && curGesture.index == ind) {
                 ArrayList<Integer> gestureValues = curGesture.end();
                 float pos[] = new float[gestureValues.size()*3];
                 short order[] = new short[gestureValues.size()*2];
@@ -183,7 +189,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             }
         }
     }
-    private void checkMovement(MotionEvent event) {
+    private void checkMovement(float rx, float ry, boolean tup, int ind) {
         //slightly easier and more efficient to go by x or y first, ex. below
         //I moved this to a seperate function so it is easier to read. We will probably be doing a lot of things on touch event so it helps to compartmentalize.
         /*
@@ -210,11 +216,11 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         up = false;
         right = false;
         left = false;
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+        if (tup) {
             return;
         }
-        float x = (float)(event.getX()/metrics.widthPixels);
-        float y = (float)(event.getY()/metrics.heightPixels);
+        float x = (float)(rx/metrics.widthPixels);
+        float y = (float)(ry/metrics.heightPixels);
         if(x > 0f && x < 1f/10f && y > 2f/3f && y < 5f/6f){                                              //Top Left
             //Log.d("top", "Left");
             up = true;

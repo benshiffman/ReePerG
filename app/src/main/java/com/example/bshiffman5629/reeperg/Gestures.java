@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class Gestures {
     public Rect bounds;
+    public int index = 0;
     public Point firstPt;
     public Point lastPt;
     public double firstDir;
@@ -15,11 +16,12 @@ public class Gestures {
     public Gestures(Rect from) {//from should be the coordinates of the box that the spells will be cast in.
         bounds = from;
     }
-    public void reInit(Point with) {
+    public void reInit(Point with, int ind) {
         gesture = new ArrayList<Integer>();
         started = true;
         gesture.add(cordOf(with));
         lastPt = with;
+        index = ind;
     }
     public static double findDir(Point from, Point to) {
         double deg = Math.toDegrees(Math.atan(((double)from.x - (double)to.x)/((double)from.y - (double)to.y)));
@@ -73,37 +75,39 @@ public class Gestures {
             return -1;
         }
     }
-    public void update(Point with) {//call this every time a new point is given
+    public void update(Point with, int ind) {//call this every time a new point is given
         if (started) {
-            int newCord = cordOf(with);
-            if (newCord == -1) {
-                lastPt = with;
-                return;
-            }
-            //Log.d("size: ", Integer.toString(gesture.size()));
-            if (gesture.size() > 1) {
-                if (gesture.get(gesture.size() - 2) != newCord) {
-                    if (Math.abs(compare(firstDir, findDir(firstPt, with))) > 20) {
-                        gesture.add(newCord);
-                        firstDir = findDir(lastPt, with);
-                        firstPt = with;
-                    } else {
-                        gesture.remove(gesture.size() - 1);
+            if (ind == index) {
+                int newCord = cordOf(with);
+                if (newCord == -1) {
+                    lastPt = with;
+                    return;
+                }
+                //Log.d("size: ", Integer.toString(gesture.size()));
+                if (gesture.size() > 1) {
+                    if (gesture.get(gesture.size() - 2) != newCord) {
+                        if (Math.abs(compare(firstDir, findDir(firstPt, with))) > 20) {
+                            gesture.add(newCord);
+                            firstDir = findDir(lastPt, with);
+                            firstPt = with;
+                        } else {
+                            gesture.remove(gesture.size() - 1);
+                            gesture.add(newCord);
+                            firstDir = findDir(lastPt, with);
+                            firstPt = with;
+                        }
+                    }
+                } else {
+                    if (gesture.get(0) != newCord) {
                         gesture.add(newCord);
                         firstDir = findDir(lastPt, with);
                         firstPt = with;
                     }
                 }
-            } else {
-                if (gesture.get(0) != newCord) {
-                    gesture.add(newCord);
-                    firstDir = findDir(lastPt, with);
-                    firstPt = with;
-                }
+                lastPt = with;
             }
-            lastPt = with;
         }else {
-            reInit(with);
+            reInit(with, ind);
         }
     }
     public ArrayList<Integer> end() {
