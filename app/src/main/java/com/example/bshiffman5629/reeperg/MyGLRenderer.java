@@ -199,6 +199,8 @@ class GroundData {
     float smallestValidDistance = 100000;
     boolean odd;
     int crosses = 0;
+    ArrayList<Float> validDistances = new ArrayList<Float>();
+
     public GroundData(float x, float y) {
         Point[] map = MyGLRenderer.mainInstance.map;
         for (int i = 1; i < map.length; i++) {
@@ -209,7 +211,7 @@ class GroundData {
             float intersect = (-10*fx)/(sx-fx);
             if (intersect > 0 && intersect < 10) {
                 float dist = ((sy - fy)*intersect)/10 + fy;
-
+                validDistances.add(dist);
                 Log.d("curCrossVal", Float.toString(dist));
                 if (Math.abs(dist) < Math.abs(smallestValidDistance)) {
                     smallestValidDistance = dist;

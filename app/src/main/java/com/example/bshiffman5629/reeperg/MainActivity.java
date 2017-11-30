@@ -254,6 +254,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         GroundData lGD = new GroundData(mPlayer.xPos - 80, mPlayer.yPos);//java.lang.NullPointerException: Attempt to read from field 'float com.example.bshiffman5629.reeperg.Player.xPos' on a null object reference
         GroundData rGD = new GroundData(mPlayer.xPos + 80, mPlayer.yPos);
         if (lGD.odd || rGD.odd) {//pos sometimes null
+
             if (mPlayer.yvelocity < 0) {
                 if (mPlayer.yvelocity  < -50) {
                     mPlayer.currentHP += (50 + mPlayer.yvelocity)*2;
@@ -264,22 +265,35 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             if (rGD.smallestValidDistance > lGD.smallestValidDistance) {
                 if (rGD.smallestValidDistance > 0) {
                     mPlayer.yPos += rGD.smallestValidDistance - 0.5;
-                }else {
-                    Log.d("RGD: ", Float.toString(rGD.smallestValidDistance));
                 }
             }else {
                 if (lGD.smallestValidDistance > 0) {
                     mPlayer.yPos += lGD.smallestValidDistance - 0.5;
-                }else {
-                    Log.d("LGD: ", Float.toString(lGD.smallestValidDistance));
                 }
             }
             if (up) {
                 uPush += 27.5f;
+
             }
         }else {
             uPush -= 1.75f;
         }
+//        for(int i = 0; lGD.validDistances.size() > i; i++){
+//            if(lGD.validDistances.get(i) > 250 && lGD.validDistances.get(i) < 500){
+//                mPlayer.yPos += lGD.smallestValidDistance - 500;
+//                if(mPlayer.yvelocity > 0){
+//                    mPlayer.yvelocity = 0;
+//                }
+//            }
+//        }
+//        for(int i = 0; rGD.validDistances.size() > i; i++){
+//            if(rGD.validDistances.get(i) > 250 && rGD.validDistances.get(i) < 500){
+//                mPlayer.yPos += rGD.smallestValidDistance - 500;
+//                if(mPlayer.yvelocity > 0){
+//                    mPlayer.yvelocity = 0;
+//                }
+//            }
+//        }
         if (onGround) {
             if (right) {
                 acceleration = 1f;
