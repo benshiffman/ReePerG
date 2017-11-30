@@ -278,6 +278,16 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         }else {
             uPush -= 1.75f;
         }
+        lGD = new GroundData(mPlayer.xPos - 80, mPlayer.yPos + 500);//java.lang.NullPointerException: Attempt to read from field 'float com.example.bshiffman5629.reeperg.Player.xPos' on a null object reference
+        rGD = new GroundData(mPlayer.xPos + 80, mPlayer.yPos + 500);
+        if (lGD.odd || rGD.odd) {
+            mPlayer.yvelocity = 0;
+            if (rGD.smallestValidDistance < lGD.smallestValidDistance) {
+                mPlayer.yPos += rGD.smallestValidDistance;
+            }else {
+                mPlayer.yPos += lGD.smallestValidDistance;
+            }
+        }
 //        for(int i = 0; lGD.validDistances.size() > i; i++){
 //            if(lGD.validDistances.get(i) > 250 && lGD.validDistances.get(i) < 500){
 //                mPlayer.yPos += lGD.smallestValidDistance - 500;
