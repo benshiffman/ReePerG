@@ -85,7 +85,6 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
     private void checkGesture(float x, float y, boolean tup, int ind) {//WIP
         if (tup) {
             if (curGesture.started) {
-                Log.d("gestureEnd", "GESTUREEND");
                 ArrayList<Integer> gestureValues = curGesture.end();
                 float pos[] = new float[gestureValues.size() * 3];
                 short order[] = new short[gestureValues.size() * 2];
@@ -136,7 +135,6 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
             }
         }else {
             if (curGesture.bounds.contains((int) x, (int) y)) {
-                Log.d("gStarted", "checkGesture: ");
                 curGesture.update(new Point((int) x, (int) y), ind);
             }else if (curGesture.started && curGesture.index == ind) {
                 ArrayList<Integer> gestureValues = curGesture.end();
@@ -253,7 +251,9 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         float uPush = 0f;
         boolean onGround = false;
         float acceleration = 0.0f;
-        if (new GroundData(mPlayer.xPos, mPlayer.yPos).odd) {//pos sometimes null
+        GroundData lGD = new GroundData(mPlayer.xPos - 80, mPlayer.yPos);//java.lang.NullPointerException: Attempt to read from field 'float com.example.bshiffman5629.reeperg.Player.xPos' on a null object reference
+        GroundData rGD = new GroundData(mPlayer.xPos + 80, mPlayer.yPos);
+        if (lGD.odd || rGD.odd) {//pos sometimes null
             if (mPlayer.yvelocity < 0) {
                 if (mPlayer.yvelocity  < -50) {
                     mPlayer.currentHP += (50 + mPlayer.yvelocity)*2;
@@ -261,8 +261,18 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 mPlayer.yvelocity = 0f;
             }
             onGround = true;
-            while (new GroundData(mPlayer.xPos, mPlayer.yPos + 5).odd) {
-                mPlayer.yPos += 5;
+            if (rGD.smallestValidDistance > lGD.smallestValidDistance) {
+                if (rGD.smallestValidDistance > 0) {
+                    mPlayer.yPos += rGD.smallestValidDistance - 0.5;
+                }else {
+                    Log.d("RGD: ", Float.toString(rGD.smallestValidDistance));
+                }
+            }else {
+                if (lGD.smallestValidDistance > 0) {
+                    mPlayer.yPos += lGD.smallestValidDistance - 0.5;
+                }else {
+                    Log.d("LGD: ", Float.toString(lGD.smallestValidDistance));
+                }
             }
             if (up) {
                 uPush += 27.5f;
@@ -277,7 +287,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 acceleration = -1f;
             }
         }
-        if (new GroundData(mPlayer.xPos - 125, mPlayer.yPos + 20).odd) {
+        if (new GroundData(mPlayer.xPos - 125, mPlayer.yPos + 20).odd || new GroundData(mPlayer.xPos - 125, mPlayer.yPos + 480).odd) {
             if (acceleration < 0) {
                 acceleration = 0;
             }
@@ -286,7 +296,7 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 mPlayer.xvelocity = 0f;
             }
         }
-        if (new GroundData(mPlayer.xPos + 125, mPlayer.yPos + 20).odd) {
+        if (new GroundData(mPlayer.xPos + 125, mPlayer.yPos + 20).odd || new GroundData(mPlayer.xPos + 125, mPlayer.yPos + 480).odd) {
             if (acceleration > 0) {
                 acceleration = 0;
             }
@@ -297,6 +307,16 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         }
         if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
             if (Math.abs(mPlayer.xvelocity) > 5) {
+                if (MyGLRenderer.mainInstance.mainPlayer.yvelocity > 0) {
+                    MyGLRenderer.mainInstance.mainPlayer.yvelocity += uPush;
+                }else {
+                    if (uPush > 0) {
+                        MyGLRenderer.mainInstance.mainPlayer.yvelocity += uPush;
+                    }
+                }
+                if (MyGLRenderer.mainInstance.mainPlayer.yvelocity < 0) {
+                    MyGLRenderer.mainInstance.mainPlayer.yvelocity = 0;
+                }
                 uPush = 0;
                 if (mPlayer.xvelocity > 0 && left) {
                     acceleration = -1;
@@ -336,32 +356,43 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                 if (MyGLRenderer.mainInstance.mainPlayer.xvelocity < 15) {
                     MyGLRenderer.mainInstance.mainPlayer.xvelocity = -15;
                 }
+                MyGLRenderer.mainInstance.mainPlayer.yvelocity = 0;
                 MyGLRenderer.mainInstance.mainPlayer.currentEffects.add(new StatEffect(StatEType.levitate));
             }
             return;
         }
         if (Arrays.equals(gesture, new short[] {4, 7, 3})) {
-            MyGLRenderer.mainInstance.mainPlayer.xvelocity = 40;
+            cost = 10;
             if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
-                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 90;
+                cost += 90;
             }
-            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 10;
+            if (MyGLRenderer.mainInstance.mainPlayer.currentMP > cost) {
+                MyGLRenderer.mainInstance.mainPlayer.xvelocity = 40;
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= cost;
+            }
+
             return;
         }
         if (Arrays.equals(gesture, new short[] {4, 1, 3})) {
-            MyGLRenderer.mainInstance.mainPlayer.xvelocity = -40;
+            cost = 10;
             if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
-                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 90;
+                cost += 90;
             }
-            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 10;
+            if (MyGLRenderer.mainInstance.mainPlayer.currentMP > cost) {
+                MyGLRenderer.mainInstance.mainPlayer.xvelocity = -40;
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= cost;
+            }
             return;
         }
         if (Arrays.equals(gesture, new short[] {2, 7, 3, 1})) {
-            MyGLRenderer.mainInstance.mainPlayer.yvelocity = 30;
+            cost = 15;
             if (MyGLRenderer.mainInstance.mainPlayer.hasEffect(StatEType.levitate)) {
-                MyGLRenderer.mainInstance.mainPlayer.currentMP -= 50;
+                cost += 50;
             }
-            MyGLRenderer.mainInstance.mainPlayer.currentMP -= 15;
+            if (MyGLRenderer.mainInstance.mainPlayer.currentMP > cost) {
+                MyGLRenderer.mainInstance.mainPlayer.yvelocity = 45;
+                MyGLRenderer.mainInstance.mainPlayer.currentMP -= cost;
+            }
             return;
         }
         /*String pval = "";

@@ -6,6 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -40,16 +41,18 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             new Point(1500, 1900),
             new Point(3000, 1900),
             new Point(3000, 1750),
-            new Point(5750, 1750),
-            new Point(5750, -250),
-            new Point(8250, -250),
-            new Point(8250, 500),
-            new Point(6250, 500),
+            new Point(4000, 1750),
+            new Point(4000, 1550),
+            new Point(5750, 1550),
+            new Point(5750, 850),
+            new Point(8250, 850),
+            new Point(8250, 1550),
+            new Point(6250, 1550),
             new Point(6250, 1750),
             new Point(7750, 1750),
             new Point(7750, 4000),
             new Point(100000, 4000)
-    };
+    };//adding 2
 
     float pathsCoords[] = {
             //Dpad
@@ -135,7 +138,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mainPlayer = new Player(4000, 1850, metrics);
 
         float mapCoords[] = new float[map.length*3];
-        short order[] = {0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15};
+        short order[] = {0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17};
         //14 pts
         for (int i = 0; i<map.length;i++) {
             mapCoords[i*3] = 2f*((float) map[i].x - mainPlayer.xPos)/(float) metrics.widthPixels;//mapPos - playerPos/width (or height)
@@ -206,7 +209,9 @@ class GroundData {
             float intersect = (-10*fx)/(sx-fx);
             if (intersect > 0 && intersect < 10) {
                 float dist = ((sy - fy)*intersect)/10 + fy;
-                if (Math.abs(dist) < smallestValidDistance) {
+
+                Log.d("curCrossVal", Float.toString(dist));
+                if (Math.abs(dist) < Math.abs(smallestValidDistance)) {
                     smallestValidDistance = dist;
                 }
                 if (dist > 0) {
