@@ -19,6 +19,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends Activity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
     DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+    public static MainActivity mainInstance;
 
     Timer timer = new Timer();
 
@@ -38,11 +39,13 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
                     updatePlayerPos();
                 }
             });
+
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainInstance = this;
         final int FPS = 40;
         TimerTask update = new GameLoopTask();
         timer.scheduleAtFixedRate(update, 500, 1000/FPS);

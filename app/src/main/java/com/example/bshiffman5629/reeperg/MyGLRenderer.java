@@ -27,6 +27,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Shape barHP;
     private Shape barMP;
 
+    private Vao test;
+    private Shader testShader;
+
     public ArrayList<Integer> gesture = new ArrayList<Integer>();
 
     public Player mainPlayer;
@@ -146,6 +149,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             mapCoords[i*3 + 2] = 0f;
         }
         floor = new Paths(mapCoords, order);
+        test = new Vao(-0.5f, -0.5f, 1f, 1f);
+        testShader = new TestShader(MainActivity.mainInstance);
     }
 
     public void onDrawFrame(GL10 unused) {
@@ -175,6 +180,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         spellCover.draw();
         mPaths.draw();
         gesturePath.draw();
+
+        GLES30.glUseProgram(testShader.programID);
+        test.render();
+        GLES30.glUseProgram(0);
     }
 
     @Override
