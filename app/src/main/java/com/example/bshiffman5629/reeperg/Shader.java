@@ -42,7 +42,7 @@ public abstract class Shader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        int fShader = GLES30.glCreateShader(GLES20.GL_VERTEX_SHADER);
+        int fShader = GLES30.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
         GLES30.glShaderSource(fShader, shaderCode);
         GLES30.glCompileShader(fShader);
         programID = GLES30.glCreateProgram();
