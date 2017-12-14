@@ -221,7 +221,6 @@ class GroundData {
             if (intersect > 0 && intersect < 10) {
                 float dist = ((sy - fy)*intersect)/10 + fy;
                 validDistances.add(dist);
-                Log.d("curCrossVal", Float.toString(dist));
                 if (Math.abs(dist) < Math.abs(smallestValidDistance)) {
                     smallestValidDistance = dist;
                 }

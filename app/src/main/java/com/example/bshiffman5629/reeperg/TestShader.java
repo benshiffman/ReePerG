@@ -8,7 +8,7 @@ import android.content.Context;
 
 public class TestShader extends Shader {
     public TestShader(Context ctx) {
-        super(ctx, "res/raw/testvs", "res/raw/testfs.fs");
+        super(ctx, R.raw.testvs, R.raw.testfs);
     }
     void setUniforms() {}
 }
